@@ -1,0 +1,59 @@
+body {
+    background-color:rgb(237, 237, 237);
+} 
+
+/* Estilos para las celdas de datos */
+.tablafija td {
+    background-color: rgba(0, 0, 0, 0.05);    /* Fondo gris claro y transparente */
+    padding: 10px;
+    color: #333;                              /* Color de texto */
+    border-radius: 2px;
+    font-family: Arial, sans-serif;
+}
+
+/* Efecto hover para resaltar filas */
+.tablafija tr:hover td {
+    background-color: rgba(0, 128, 255, 0.1); /* Color de fondo al pasar el ratón por encima */
+}
+
+.interna table {
+    border-collapse: collapse; /* Quita los espacios entre bordes */
+    width: 100%; /* Ancho de la tabla */
+}
+
+.interna table, th, td {
+    border: 1px solid black; /* Borde fino y negro */
+}
+
+.interna th, td {
+    padding: 8px; /* Espaciado interno para las celdas */
+    text-align: left; /* Alineación del texto */
+    font-family: Arial, sans-serif; /* Fuente similar a Excel */
+    font-size: 14px; /* Tamaño de fuente */
+}
+
+
+
+
+/* BOTONES MENU */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Coloca los botones en una columna */
+    gap: 10px; /* Espacio entre los botones */
+    padding: 20px;
+    width: 150px;
+    border: 1px solid black;
+}
+.button {
+    padding: 15px 20px; /* Espaciado interno del botón */
+    font-size: 16px;
+    color: white; /* Color del texto */
+    background-color: #007bff; /* Color de fondo del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+}
+.button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el mouse */
+}

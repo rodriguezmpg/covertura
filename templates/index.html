@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APP</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+</head>
+<body>
+ 
+
+    <div class="button-container">
+        <button class="button" onclick="window.location.href='http://127.0.0.1:5000/main'">APP</button>
+        <button class="button" onclick="window.open('http://127.0.0.1:5000/recordstart')">Grabar</button>
+    </div>
+
+</body>
+</html>

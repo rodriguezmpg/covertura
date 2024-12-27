@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+</head>
+<body>
+
+    <form action="/mainstart" method="POST" enctype="multipart/form-data">
+        <table class="tablaform">
+               <tr>
+                   <td>PE <input type="text" name="precio_banda_post_form" value="" size="4"></td>
+                   <td>Niveles <input type="text" name="niveles_post_form" value="5" size="4"></td>
+                   <td>%SL <input type="text" name="percentsl_post_form" value="5" size="4"></td>
+                   <td><button type="submit">Iniciar</button></td>
+               </tr>
+        </table>  
+    </form>
+    
+
+    <div id="datos">
+        <table class="tablafija">
+         <tbody>
+            <tr>
+                <td>Precio Banda</td>
+                <td><span id="precio_banda"></span></td>
+                <td>Bal SL</td>
+                <td><span id="balance_sl"></span></td>
+            </tr>
+            <tr>
+                <td>P. Actual</td>
+                <td><span id="current_price"></span></td>
+                <td>Bal TP</td>
+                <td><span id="balance_tp"></span></td>
+            </tr>
+            <tr>
+                <td>P.Short</span></td>
+                <td><span id="control_posicion"></span></td>
+                <td>Bal SLTP</td>
+                <td><span id="balance_sltp"></span></td>
+            </tr>
+            <tr>
+                <td>TP</td>
+                <td><span id="control_tp"></span></td>
+                <td>Filtro SP</td>
+                <td><span id="contador_filtro_sameprice"></span></td>
+            </tr>
+            <tr>
+                <td>Prom Splits</td>
+                <td><span id="promedio_splits"></span></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Cont. TP</td>
+                <td><span id="contador_tp"></span></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Cont. SL</td>
+                <td><span id="contador_posiciones"></span></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+   
+
+        
+    </div>
+    <div id="tables-container"></div>
+
+    <script>
+        function actualizarDatos() {
+            $.getJSON('/datos', function(data) {
+                $('#current_price').text(data.Cprecio);
+                $('#precio_banda').text(data.precio_banda);               
+                })
+        }           
+        setInterval(actualizarDatos, 200);
+    </script>
+
+<br />
+<br />
+    <table id="csvTable">
+      
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script>
+        const csvURL = '/static/datos.csv';
+    
+        function cargarCSV() {
+            fetch(csvURL)
+                .then(response => response.text())
+                .then(csvData => {
+                    // Parsear el CSV usando PapaParse
+                    Papa.parse(csvData, {
+                        header: false,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            const data = results.data;
+                            const tableBody = document.getElementById("tableBody");
+    
+                            // Iterar sobre cada fila de datos en el CSV
+                            data.forEach(row => {
+                                // Crear una nueva fila en la tabla
+                                const tr = document.createElement("tr");
+    
+                                // Añadir celdas a la fila con las variables en la posición deseada
+                                tr.innerHTML = `   <td>
+                                <table class="interna">
+                                    <tbody>
+                                        <tr>
+                                            <td>${row[0]}</td>
+                                            <td>PE</td>
+                                            <td>PS</td>
+                                            <td>PnL SL</td>
+                                            <td>Dif %</td>
+                                            <td>TP</td>
+                                            <td>Pnl TP</td>
+                                            <td>TP Price</td>
+                                            <td>TP P Ej</td>
+                                            <td>Apertura</td>
+                                            <td>Cierre</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>${row[1]}</td>
+                                            <td>${row[2]}</td>
+                                            <td>${row[3]}</td>
+                                            <td>${row[4]}</td>
+                                            <td>${row[5]}</td>
+                                            <td>${row[6]}</td>
+                                            <td>${row[7]}</td>
+                                            <td>${row[8]}</td>
+                                            <td>${row[9]}</td>
+                                            <td>${row[10]}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>`
+                                   
+    
+                                // Añadir la fila a la tabla
+                                tableBody.appendChild(tr);
+                            });
+                        }
+                    });
+                })
+                .catch(error => console.error('Error al cargar el archivo CSV:', error));
+        }
+    
+        // Llamar a la función para cargar el CSV cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', cargarCSV);
+    </script>
+
+</body>
+</html>
