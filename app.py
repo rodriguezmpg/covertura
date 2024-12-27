@@ -10,17 +10,14 @@ APY_SECRET = 'EdPJTJn5gnCSgq3HpuuNANPLRHwtTA7TZLIp5Mb8aLIFjqyYCjjDDuXVDcLbyC2i'
 client = Client(APY_KEY,APY_SECRET, tld='com')
 symbol = 'ETHUSDT'
 
-
 @app.route('/')
-def get_eth_price():
+def hello():
+    # Obtener el precio de ETH/USDT
     try:
-        # Obtener el precio actual de ETH/USDT
-        ticker = client.get_symbol_ticker(symbol="ETHUSDT")
-        eth_price = ticker['price']  # Extraer el precio de la respuesta
-        return f"El precio actual de ETH/USDT es: ${eth_price}"
+        eth_price = client.get_symbol_ticker(symbol="ETHUSDT")
+        return f"El precio actual de ETH/USDT es: {eth_price['price']}"
     except Exception as e:
-        # En caso de error, mostrar el mensaje de error
-        return f"Error al obtener el precio de ETH/USDT: {str(e)}"
+        return f"Ocurrió un error al obtener el precio: {str(e)}"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8080)
