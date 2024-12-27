@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request
+import os
 import threading
 import trading_loop
 
@@ -41,8 +42,8 @@ def start_trading():
 
 
 
-app.run(debug=True, use_reloader=False) # Esta linea es lo que pone a funcionar el flask
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True, use_reloader=False)
 
 
 
