@@ -43,7 +43,7 @@ def main_loop(pe_post,niveles_post,percent_sl_post):
             loop_class.previous_price = loop_class.current_price
 
 
-        time.sleep(0.2)
+        time.sleep(5)
 
 
 def crear_csv():
