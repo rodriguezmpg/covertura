@@ -1,4 +1,4 @@
 Flask
 requests
 pandas
-python-binance
+python-binance>=1.0.15
