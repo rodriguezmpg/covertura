@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
-import os
-import threading
+
 import trading_loop
+import asyncio
 
 
 app=Flask(__name__)
@@ -32,11 +32,8 @@ def start_trading():
     niveles_post_form = request.form.get('niveles_post_form')
     percentsl_post_form = request.form.get('percentsl_post_form')
 
-    main_thread = threading.Thread(
-        target=trading_loop.main_loop,
-        args=(precio_banda_post, niveles_post_form, percentsl_post_form)
-    )
-    main_thread.start()
+    asyncio.run(trading_loop.start_socket(precio_banda_post, niveles_post_form, percentsl_post_form))
+
     return render_template('main_loop.html')
 
 
