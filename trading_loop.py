@@ -32,18 +32,18 @@ def main_loop(pe_post,niveles_post,percent_sl_post):
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
     logger = logging.getLogger()
 
-    while True:
+
     
-        ticker = client.futures_symbol_ticker(symbol=symbol)
-        loop_class.current_price = float(ticker['price'])
+    ticker = client.futures_symbol_ticker(symbol=symbol)
+    loop_class.current_price = float(ticker['price'])
 
-        if loop_class.current_price != loop_class.previous_price:
-            print(f"Precio: {loop_class.current_price} : {pe_post} :  : {niveles_post} :  : {percent_sl_post}  ")        
-            logger.info(f"{loop_class.current_price:.2f}")
-            loop_class.previous_price = loop_class.current_price
+    if loop_class.current_price != loop_class.previous_price:
+        print(f"Precio: {loop_class.current_price} : {pe_post} :  : {niveles_post} :  : {percent_sl_post}  ")        
+        logger.info(f"{loop_class.current_price:.2f}")
+        loop_class.previous_price = loop_class.current_price
 
 
-        time.sleep(5)
+
 
 
 def crear_csv():
