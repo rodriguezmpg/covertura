@@ -1,52 +1,26 @@
-from flask import Flask, render_template, jsonify, request
-import os
-import threading
-import trading_loop
+from flask import Flask
+from binance.client import Client
+from binance.enums import *
 
+app = Flask(__name__)
 
-app=Flask(__name__)
+APY_KEY = 'pYBw0fO0OisuqFXhwj2SNy2DYU8N1MFCH2zJ2CUeYGiHwCa7DazkOjCChJaMfyth'
+APY_SECRET = 'EdPJTJn5gnCSgq3HpuuNANPLRHwtTA7TZLIp5Mb8aLIFjqyYCjjDDuXVDcLbyC2i'
 
-
+client = Client(APY_KEY,APY_SECRET, tld='com')
+symbol = 'ETHUSDT'
 
 @app.route('/')
-def index():
-    return render_template('index.html')
-
-
-
-@app.route('/datos')
-def datos():
-    return jsonify({
-        'precio_banda': trading_loop.loop_class.precio_banda,
-        'Cprecio': trading_loop.loop_class.current_price
-
-    })
-
-@app.route('/main')
-def index_backtest():
-    return render_template('main_loop.html')
-
-@app.route('/mainstart', methods=['POST'])
-def start_trading():
-    precio_banda_post = request.form.get('precio_banda_post_form')
-    niveles_post_form = request.form.get('niveles_post_form')
-    percentsl_post_form = request.form.get('percentsl_post_form')
-
-    main_thread = threading.Thread(
-        target=trading_loop.main_loop,
-        args=(precio_banda_post, niveles_post_form, percentsl_post_form)
-    )
-    main_thread.start()
-    return render_template('main_loop.html')
-
-
-
+def hello():
+    # Obtener el precio de ETH/USDT
+    try:
+        eth_price = client.get_symbol_ticker(symbol="ETHUSDT")
+        return f"El precio actual de ETH/USDT es: {eth_price['price']}"
+    except Exception as e:
+        return f"Ocurrió un error al obtener el precio: {str(e)}"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True, use_reloader=False)
-
-
-
+    app.run(host="0.0.0.0", port=8080)
 
 
 
