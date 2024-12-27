@@ -13,7 +13,8 @@ def index():
 def datos():
     return jsonify({
         'precio_banda': trading_loop.loop_class.precio_banda,
-        'Cprecio': trading_loop.loop_class.current_price
+        'Cprecio': trading_loop.loop_class.current_price,
+        'contador': trading_loop.loop_class.contador
     })
 
 @app.route('/main')
@@ -27,6 +28,8 @@ def start_trading():
     percentsl_post_form = request.form.get('percentsl_post_form')
     asyncio.run(trading_loop.start_socket(precio_banda_post, niveles_post_form, percentsl_post_form))
     return render_template('main_loop.html')
+
+
 
 
 if __name__ == '__main__':
