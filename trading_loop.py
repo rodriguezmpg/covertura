@@ -21,6 +21,7 @@ class LoopData:
         self.precio_banda = 0.00
         self.current_price = 0.00
         self.previous_price = 0.00
+        self.contador = 0
 
 loop_class = LoopData()
 
@@ -28,7 +29,8 @@ loop_class = LoopData()
 def process_message(msg):
     loop_class.current_price = float(msg['c'])  # 'c' es el precio actual del ticker
     if loop_class.current_price != loop_class.previous_price:
-        print(f"Precio: {loop_class.current_price}  - Precio banda {loop_class.current_price}")        
+        print(f"Precio: {loop_class.current_price}  - Precio banda {loop_class.current_price}") 
+        loop_class.contador = loop_class.contador + 1       
         loop_class.previous_price = loop_class.current_price
 
 
@@ -55,9 +57,6 @@ def crear_csv():
         pass  
     print("Archivo CSV creado o vaciado exitosamente.")
 crear_csv()  
-
-
-
 
 
 
