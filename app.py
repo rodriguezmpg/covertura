@@ -5,11 +5,9 @@ from binance.enums import *
 app = Flask(__name__)
 
 
-print "Hello"
-
-# @app.route('/')
-# def hello_world():
-#     return 'Hello, World!'
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
 
 
 
