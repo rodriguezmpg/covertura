@@ -29,44 +29,14 @@
             <tr>
                 <td>Precio Banda</td>
                 <td><span id="precio_banda"></span></td>
-                <td>Bal SL</td>
-                <td><span id="balance_sl"></span></td>
+                <td>Contador</td>
+                <td><span id="contador"></span></td>
             </tr>
             <tr>
                 <td>P. Actual</td>
                 <td><span id="current_price"></span></td>
-                <td>Bal TP</td>
+                <td>-</td>
                 <td><span id="balance_tp"></span></td>
-            </tr>
-            <tr>
-                <td>P.Short</span></td>
-                <td><span id="control_posicion"></span></td>
-                <td>Bal SLTP</td>
-                <td><span id="balance_sltp"></span></td>
-            </tr>
-            <tr>
-                <td>TP</td>
-                <td><span id="control_tp"></span></td>
-                <td>Filtro SP</td>
-                <td><span id="contador_filtro_sameprice"></span></td>
-            </tr>
-            <tr>
-                <td>Prom Splits</td>
-                <td><span id="promedio_splits"></span></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Cont. TP</td>
-                <td><span id="contador_tp"></span></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Cont. SL</td>
-                <td><span id="contador_posiciones"></span></td>
-                <td></td>
-                <td></td>
             </tr>
         </tbody>
     </table>
@@ -80,7 +50,8 @@
         function actualizarDatos() {
             $.getJSON('/datos', function(data) {
                 $('#current_price').text(data.Cprecio);
-                $('#precio_banda').text(data.precio_banda);               
+                $('#precio_banda').text(data.precio_banda);  
+                $('#contador').text(data.contador);               
                 })
         }           
         setInterval(actualizarDatos, 200);
