@@ -14,7 +14,22 @@ def datos():
     return jsonify({
         'precio_banda': trading_loop.loop_class.precio_banda,
         'Cprecio': trading_loop.loop_class.current_price,
-        'contador': trading_loop.loop_class.contador
+        'contador': trading_loop.loop_class.contador,
+        'limite_inferior': trading_loop.loop_class.limite_inferior,
+        'Po1_valor': round(trading_loop.loop_class.Po1_valor,2),
+        'Po2_valor': round(trading_loop.loop_class.Po2_valor,2),
+        'Po3_valor': round(trading_loop.loop_class.Po3_valor,2),
+        'Po4_valor': round(trading_loop.loop_class.Po4_valor,2),
+        'Po5_valor': round(trading_loop.loop_class.Po5_valor,2),
+        'Po6_valor': round(trading_loop.loop_class.Po6_valor,2),
+        'Po7_valor': round(trading_loop.loop_class.Po7_valor,2),
+        'step1_valor': round(trading_loop.loop_class.step1_valor ,2),
+        'step2_valor': round(trading_loop.loop_class.step2_valor ,2),
+        'step3_valor': round(trading_loop.loop_class.step3_valor ,2),
+        'step4_valor': round(trading_loop.loop_class.step4_valor ,2),
+        'step5_valor': round(trading_loop.loop_class.step5_valor ,2),
+        'step6_valor': round(trading_loop.loop_class.step6_valor ,2)
+      
     })
 
 @app.route('/main')
