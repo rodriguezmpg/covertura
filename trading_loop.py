@@ -85,8 +85,8 @@ class LoopData: ##VARIABLES UTILIZADAS EN LA SIMULACION
         self.T5_valorperdida = 0.00
         self.T6_valorperdida = 0.00
         self.T4_percperdida = 0.00
-        self.T4_percperdida = 0.00
-        self.T4_percperdida = 0.00
+        self.T5_percperdida = 0.00
+        self.T6_percperdida = 0.00
         self.T4_MaxUSDTQty = 0.00
         self.T5_MaxUSDTQty = 0.00
         self.T6_MaxUSDTQty = 0.00
@@ -204,7 +204,7 @@ def calculos(msg):
 
 
 
-        #Logica de apertura y cierre de subposiciones
+        #LOGICA DE POSICIONES
 
         if lp.current_price < lp.Po1_valor and not lp.control_pos1: #POS1
             lp.control_pos1 = True
