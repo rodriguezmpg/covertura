@@ -15,8 +15,8 @@
         <table class="tablaform">
                <tr>
                    <td>PE <input type="text" name="precio_banda_post_form" value="" size="4"></td>
-                   <td>Niveles <input type="text" name="niveles_post_form" value="5" size="4"></td>
-                   <td>%SL <input type="text" name="percentsl_post_form" value="5" size="4"></td>
+                   <td>Niveles <select name="niveles_post_form" style="width: 50px;"><option value="5" selected>5</option><option value="7">7</option></select></td>
+                   <td>SL<select name="sloption_post_form" style="width: 70px;"><option value="1" selected>%</option><option value="2">Valor</option></select> <input type="text" name="sl_post_form" value="" size="4"></td>
                    <td><button type="submit">Iniciar</button></td>
                </tr>
         </table>  
@@ -35,14 +35,14 @@
             <tr>
                 <td>PE</td>
                 <td><span id="precio_banda"></span></td>
-                <td>-</td>
-                <td><span id=""></span></td>
+                <td>Niveles</td>
+                <td><span id="input_niveles"></span></td>
             </tr>
             <tr>
                 <td>Po1_valor</td>
                 <td><span id="Po1_valor"></span></td>
-                <td>-</td>
-                <td><span id=""></span></td>
+                <td>% SL</td>
+                <td><span id="percentsl"></span></td>
             </tr>
             <tr>
                 <td>step1_valor</td>
@@ -150,6 +150,9 @@
                 $('#step4_valor').text(data.step4_valor); 
                 $('#step5_valor').text(data.step5_valor); 
                 $('#step6_valor').text(data.step6_valor);  
+                
+                $('#input_niveles').text(data.input_niveles);
+                $('#percentsl').text(data.percentsl);
                 })
         }           
         setInterval(actualizarDatos, 200);

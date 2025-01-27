@@ -12,23 +12,26 @@ def index():
 @app.route('/datos')
 def datos():
     return jsonify({
-        'precio_banda': trading_loop.loop_class.precio_banda,
-        'Cprecio': trading_loop.loop_class.current_price,
-        'contador': trading_loop.loop_class.contador,
-        'limite_inferior': trading_loop.loop_class.limite_inferior,
-        'Po1_valor': round(trading_loop.loop_class.Po1_valor,2),
-        'Po2_valor': round(trading_loop.loop_class.Po2_valor,2),
-        'Po3_valor': round(trading_loop.loop_class.Po3_valor,2),
-        'Po4_valor': round(trading_loop.loop_class.Po4_valor,2),
-        'Po5_valor': round(trading_loop.loop_class.Po5_valor,2),
-        'Po6_valor': round(trading_loop.loop_class.Po6_valor,2),
-        'Po7_valor': round(trading_loop.loop_class.Po7_valor,2),
-        'step1_valor': round(trading_loop.loop_class.step1_valor ,2),
-        'step2_valor': round(trading_loop.loop_class.step2_valor ,2),
-        'step3_valor': round(trading_loop.loop_class.step3_valor ,2),
-        'step4_valor': round(trading_loop.loop_class.step4_valor ,2),
-        'step5_valor': round(trading_loop.loop_class.step5_valor ,2),
-        'step6_valor': round(trading_loop.loop_class.step6_valor ,2)
+        'precio_banda': trading_loop.lp.precio_banda,
+        'Cprecio': trading_loop.lp.current_price,
+        'contador': trading_loop.lp.contador,
+        'limite_inferior': trading_loop.lp.limite_inferior,
+        'Po1_valor': round(trading_loop.lp.Po1_valor,2),
+        'Po2_valor': round(trading_loop.lp.Po2_valor,2),
+        'Po3_valor': round(trading_loop.lp.Po3_valor,2),
+        'Po4_valor': round(trading_loop.lp.Po4_valor,2),
+        'Po5_valor': round(trading_loop.lp.Po5_valor,2),
+        'Po6_valor': round(trading_loop.lp.Po6_valor,2),
+        'Po7_valor': round(trading_loop.lp.Po7_valor,2),
+        'step1_valor': round(trading_loop.lp.step1_valor ,2),
+        'step2_valor': round(trading_loop.lp.step2_valor ,2),
+        'step3_valor': round(trading_loop.lp.step3_valor ,2),
+        'step4_valor': round(trading_loop.lp.step4_valor ,2),
+        'step5_valor': round(trading_loop.lp.step5_valor ,2),
+        'step6_valor': round(trading_loop.lp.step6_valor ,2),
+        
+        'input_niveles': round(trading_loop.lp.input_niveles ,2),
+        'percentsl': round(trading_loop.lp.percentsl ,2) 
       
     })
 
@@ -38,10 +41,15 @@ def index_backtest():
 
 @app.route('/mainstart', methods=['POST'])
 def start_trading():
+
+    # REQUEST FROM FORMULARIO
     precio_banda_post = request.form.get('precio_banda_post_form')
     niveles_post_form = request.form.get('niveles_post_form')
-    percentsl_post_form = request.form.get('percentsl_post_form')
-    asyncio.run(trading_loop.start_socket(precio_banda_post, niveles_post_form, percentsl_post_form))
+    sl_post_form = request.form.get('sl_post_form')
+    sloption_post_form = request.form.get('sloption_post_form')
+
+    asyncio.run(trading_loop.start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form))
+    
     return render_template('main_loop.html')
 
 
