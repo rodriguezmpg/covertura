@@ -29,9 +29,56 @@ def datos():
         'step4_valor': round(trading_loop.lp.step4_valor ,2),
         'step5_valor': round(trading_loop.lp.step5_valor ,2),
         'step6_valor': round(trading_loop.lp.step6_valor ,2),
-        
         'input_niveles': round(trading_loop.lp.input_niveles ,2),
-        'percentsl': round(trading_loop.lp.percentsl ,2) 
+        'percentsl': round(trading_loop.lp.percentsl ,2), 
+
+        'recorrido_perc1': round(trading_loop.lp.recorrido_perc1 ,4), 
+        'recorrido_perc2': round(trading_loop.lp.recorrido_perc2 ,4), 
+        'recorrido_perc3': round(trading_loop.lp.recorrido_perc3 ,4), 
+        'recorrido_perc4': round(trading_loop.lp.recorrido_perc4 ,4), 
+        'recorrido_perc5': round(trading_loop.lp.recorrido_perc5 ,4), 
+        'recorrido_perc6': round(trading_loop.lp.recorrido_perc6 ,4), 
+        'recorrido_perc7': round(trading_loop.lp.recorrido_perc7 ,4),
+        'sum_recorrrido_perc': round(trading_loop.lp.sum_recorrrido_perc ,4),
+
+        'Qty_PosicionTotal': round(trading_loop.lp.Qty_PosicionTotal ,2),
+
+        'PF_esperado1': round(trading_loop.lp.PF_esperado1 ,2), 
+        'PF_esperado2': round(trading_loop.lp.PF_esperado2 ,2),
+        'PF_esperado3': round(trading_loop.lp.PF_esperado3 ,2),
+        'PF_esperado4': round(trading_loop.lp.PF_esperado4 ,2),
+        'PF_esperado5': round(trading_loop.lp.PF_esperado5 ,2),
+        'PF_esperado6': round(trading_loop.lp.PF_esperado6 ,2),
+        'PF_esperado7': round(trading_loop.lp.PF_esperado7 ,2),
+        'sum_PF_esperado': round(trading_loop.lp.sum_PF_esperado ,2),
+        'Qty_USDT_SubPosicion': round(trading_loop.lp.Qty_USDT_SubPosicion ,2),
+        'sum_Qty_USDT_SubPosicion': round(trading_loop.lp.sum_Qty_USDT_SubPosicion ,2),
+
+        'Qty_mVar1': round(trading_loop.lp.Qty_mVar1 ,3), 
+        'Qty_mVar2': round(trading_loop.lp.Qty_mVar2 ,3), 
+        'Qty_mVar3': round(trading_loop.lp.Qty_mVar3 ,3), 
+        'Qty_mVar4': round(trading_loop.lp.Qty_mVar4 ,3), 
+        'Qty_mVar5': round(trading_loop.lp.Qty_mVar5 ,3), 
+        'Qty_mVar6': round(trading_loop.lp.Qty_mVar6 ,3), 
+        'Qty_mVar7': round(trading_loop.lp.Qty_mVar7 ,3), 
+        'sum_Qty_mVar': round(trading_loop.lp.sum_Qty_mVar ,3), 
+
+        'perc_SubSL': round(trading_loop.lp.perc_SubSL ,4), 
+        'valor_SubSL': round(trading_loop.lp.valor_SubSL ,2),
+
+        'T4_valorperdida': round(trading_loop.lp.T4_valorperdida,2),
+        'T5_valorperdida': round(trading_loop.lp.T5_valorperdida,2),
+        'T6_valorperdida': round(trading_loop.lp.T6_valorperdida,2),
+        'T4_percperdida': round(trading_loop.lp.T4_percperdida,4),
+        'T5_percperdida': round(trading_loop.lp.T5_percperdida,4),
+        'T6_percperdida': round(trading_loop.lp.T6_percperdida,4), 
+        'T4_MaxUSDTQty': round(trading_loop.lp.T4_MaxUSDTQty,2),
+        'T5_MaxUSDTQty': round(trading_loop.lp.T5_MaxUSDTQty,2),
+        'T6_MaxUSDTQty': round(trading_loop.lp.T6_MaxUSDTQty,2),
+        
+
+
+        
       
     })
 
