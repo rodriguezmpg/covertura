@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import os
 import trading_loop
-from cp import open_order
+import cp
 import asyncio
 
 app=Flask(__name__)
@@ -13,7 +13,14 @@ def index():
 
 @app.route('/oporder')
 def open():
-    order = open_order()
+    order = cp.open_order()
+    ip = cp.get_public_ip()
+
+    if ip:
+        return jsonify({"order": order, "ip": ip})  # Devuelve tanto la orden como la IP en JSON
+    else:
+        return jsonify({"order": order, "error": "No se pudo obtener la IP"})
+
     return jsonify(order) 
 
 

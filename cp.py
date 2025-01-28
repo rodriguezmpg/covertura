@@ -18,10 +18,21 @@ def open_order():
             quantity=0.01              
         )
         print(f"Orden abierta exitosamente: {orden}")
-        return orden  # Regresa la respuesta de la orden
+        return orden  # Regresa la respuesta de la orden IMPORTANTE PARA SABER QUE FALLA NO QUITAR
     except Exception as e:
         print(f"Error al abrir la orden: {e}")
         return str(e)
+
+
+#Obtencion de la IP
+def get_public_ip():
+    try:
+        response = requests.get('https://api.ipify.org')  # O usa https://api.ipify.org
+        data = response.json()
+        return data['origin']  # La IP estará bajo la clave 'origin'
+    except Exception as e:
+        print(f"Error al obtener la IP: {e}")
+        return None
 
 
 
