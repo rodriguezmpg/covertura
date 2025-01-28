@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import os
 import trading_loop
-import cp.py
+from cp import open_order
 import asyncio
 
 app=Flask(__name__)
@@ -10,8 +10,11 @@ app=Flask(__name__)
 def index():
     return render_template('index.html')
 
+
 @app.route('/oporder')
-open_order()
+def open():
+    order = open_order()
+    return jsonify(order) 
 
 
 @app.route('/datos')
