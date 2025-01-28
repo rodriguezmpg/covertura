@@ -232,20 +232,19 @@ def calculos(msg):
         if lp.current_price < lp.Po1_valor and not rt.control_pos1: #POS1
             rt.control_pos1 = True
 
-            rt.PE_Pos1 = lp.current_price #Toma el valor del precio de entrada (para hacer una primera etimacion del splittage)
+            rt.PE_Pos1 = lp.Po1_valor * 1.0005 #Aca tiene que tomar el current price en ese momento, simulo un splittage
+            rt.SL_Pos1 = rt.PE_Pos1 + (rt.PE_Pos1*lp.perc_SubSL) #Establece el TP y el SL en base al precio tomado.
+            rt.TP_Pos1 = rt.PE_Pos1 - (rt.PE_Pos1*lp.perc_SubSL)
             
-            # lp.perc_SubSL
 
-            # rt.TP_Pos1
-            # rt.SL_Pos1
-
-
-        if lp.current_price < lp.step1_valor and not rt.control_TP1: #TP1
+        if lp.current_price < rt.TP_Pos1 and not rt.control_TP1 and rt.control_pos1: #TP1
             rt.control_TP1 = True
 
-        if lp.current_price > lp.precio_banda and rt.control_pos1: #SL1
+        if lp.current_price > rt.SL_Pos1 and rt.control_pos1: #SL1
             rt.control_pos1 = False
             rt.control_TP1 = False
+            rt.SL_Pos1 = 0.00
+            rt.TP_Pos1 = 0.00
 
         
         

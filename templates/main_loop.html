@@ -219,50 +219,56 @@
                         <table class="tablafija">
                             <tbody>
                             <tr>
-                              <td colspan="4">N1</th>
-                              <td>0</th>
+                              <td colspan="5">N1</td>
+                              <td>0</td>
                             </tr>
                             <tr>  
-                              <td>SL</td>
+                              <td>SL (lp)</td>
                               <td><span class="precio_banda"></span></td>
+                              <td>SL (rt)</td>
+                              <td><span class="SL_Pos1"></span></td>
                               <td>Estado</td>
                               <td><span class="control_pos1"></span></td>
-                              <td>1</td>
                             </tr>
                             <tr>
                               <td>Po1</td>
-                              <td><span class="Po1_valor"></span></td>
+                              <td><span class="Po1_valor"></span></td> 
+                              <td>PE</td>
+                              <td><span class="PE_Pos1"></span></td>
                               <td>T</td>
                               <td>toques </td>
-                              <td>1</td>
                             </tr>
                             <tr>
-                              <td>TP</td>
+                              <td>TP(lp)</td>
                               <td><span class="step1_valor"></span></td>
+                              <td>TP (rt)</td>
+                              <td><span class="TP_Pos1"></span></td>
                               <td>Est TP</td>
                               <td><span class="control_TP1"></span></td>
-                              <td>1</td>
                             </tr>
                             <tr>
                               <td>Val Puro</td>
                               <td>valpuro</td>
+                              <td>1</td>
+                              <td>1</td>
                               <td>Val a Rec</td>
                               <td>val a recuperar</td>
-                              <td>1</td>
                             </tr>
                             <tr>
                               <td>Val Rec</td>
                               <td>valrec</td>
-                              <td>libre</td>
-                              <td>libre</td>
                               <td>1</td>
+                              <td>1</td>
+                              <td>libre</td>
+                              <td>libre</td>
                             </tr>
                             <tr>
                               <td>Val total</td>
                               <td>val total</td>
-                              <td>libre</td>
-                              <td>libre</td>
                               <td>1</td>
+                              <td>1</td>
+                              <td>libre</td>
+                              <td>libre</td>
                             </tr>
                           </tbody>
                           </table>
@@ -339,9 +345,11 @@
                 $('.T6_MaxUSDTQty').text(data.T6_MaxUSDTQty);
                 $('.control_pos1').text(data.control_pos1);
                 $('.control_TP1').text(data.control_TP1);
-                
+                $('.PE_Pos1').text(data.PE_Pos1);
+                $('.TP_Pos1').text(data.TP_Pos1);
+                $('.SL_Pos1').text(data.SL_Pos1);
+               
 
-                
                 
                 })
         }           

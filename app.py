@@ -77,7 +77,16 @@ def datos():
         'T6_MaxUSDTQty': round(trading_loop.lp.T6_MaxUSDTQty,2),
 
         'control_pos1': trading_loop.rt.control_pos1,
-        'control_TP1': trading_loop.rt.control_TP1
+
+        'control_TP1': trading_loop.rt.control_TP1,
+
+        'PE_Pos1': round(trading_loop.rt.PE_Pos1,2),
+
+        'SL_Pos1': round(trading_loop.rt.SL_Pos1,2),
+        
+        'TP_Pos1': round(trading_loop.rt.TP_Pos1,2),
+
+        
       
     })
 
