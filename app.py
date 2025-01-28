@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import os
 import trading_loop
+import cp.py
 import asyncio
 
 app=Flask(__name__)
@@ -8,6 +9,10 @@ app=Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/oporder')
+open_order()
+
 
 @app.route('/datos')
 def datos():

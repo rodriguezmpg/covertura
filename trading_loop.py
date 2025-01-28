@@ -137,12 +137,38 @@ class RealTime: ##VARIABLES UTILIZADAS EN LAS POSICIONES
         self.SL_Pos6 = 0.00
         self.SL_Pos7 = 0.00
 
+        self.Qty_USDT_SubPosicion = 0.00
+
+        self.ValorPuro_Pos1 = 0.00
+        self.ValorPuro_Pos2 = 0.00
+        self.ValorPuro_Pos3 = 0.00
+        self.ValorPuro_Pos4 = 0.00
+        self.ValorPuro_Pos5 = 0.00
+        self.ValorPuro_Pos6 = 0.00
+        self.ValorPuro_Pos7 = 0.00
+
+        self.ValorRec_Pos1 = 0.00
+        self.ValorRec_Pos2 = 0.00
+        self.ValorRec_Pos3 = 0.00
+        self.ValorRec_Pos4 = 0.00
+        self.ValorRec_Pos5 = 0.00
+        self.ValorRec_Pos6 = 0.00
+        self.ValorRec_Pos7 = 0.00
+
+        self.ValorTotal_Pos1 = 0.00
+        self.ValorTotal_Pos2 = 0.00
+        self.ValorTotal_Pos3 = 0.00
+        self.ValorTotal_Pos4 = 0.00
+        self.ValorTotal_Pos5 = 0.00
+        self.ValorTotal_Pos6 = 0.00
+        self.ValorTotal_Pos7 = 0.00
+
 rt = RealTime()
 
 
 
 def calculos(msg):
-    #lp.current_price = float(msg['c'])  # 'c' es el precio actual del ticker
+    #lp.current_price = float(msg['c'])  # 'c' es el precio actual del ticker // Borrar donde puse en las variables post que es un POST
     if lp.current_price != lp.previous_price:
         lp.previous_price = lp.current_price
         print(f"Precio: {lp.current_price}  - Precio banda {lp.current_price}") 
@@ -235,6 +261,11 @@ def calculos(msg):
             rt.PE_Pos1 = lp.Po1_valor * 1.0005 #Aca tiene que tomar el current price en ese momento, simulo un splittage
             rt.SL_Pos1 = rt.PE_Pos1 + (rt.PE_Pos1*lp.perc_SubSL) #Establece el TP y el SL en base al precio tomado.
             rt.TP_Pos1 = rt.PE_Pos1 - (rt.PE_Pos1*lp.perc_SubSL)
+
+
+            rt.Qty_USDT_SubPosicion = lp.PF_esperado1 / ((rt.PE_Pos1  - lp.limite_inferior) / rt.PE_Pos1 ) #el segundo termino de la division es el recorrido_perc1 pero calculado en el PE
+            
+            rt.ValorPuro_Pos1 = rt.Qty_USDT_SubPosicion * (1-(rt.PE_Pos1 / lp.current_price)) #Valor de la subposicion que corresponde a covertura
             
 
         if lp.current_price < rt.TP_Pos1 and not rt.control_TP1 and rt.control_pos1: #TP1
@@ -245,6 +276,7 @@ def calculos(msg):
             rt.control_TP1 = False
             rt.SL_Pos1 = 0.00
             rt.TP_Pos1 = 0.00
+            rt.PE_Pos1 = 0.00
 
         
         
