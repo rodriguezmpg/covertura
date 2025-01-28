@@ -17,7 +17,8 @@
                    <td>PE <input type="text" name="precio_banda_post_form" value="" size="4"></td>
                    <td>Niveles <select name="niveles_post_form" style="width: 50px;"><option value="5" selected>5</option><option value="7">7</option></select></td>
                    <td>SL<select name="sloption_post_form" style="width: 70px;"><option value="1" selected>%</option><option value="2">Valor</option></select> <input type="text" name="sl_post_form" value="" size="4"></td>
-                   <td><button type="submit">Simular Valores</button></td>
+                   <td>CP <input type="text" name="current_price_post_form" value="" size="4"></td>
+                   <td><button type="submit">Simular</button></td>
                </tr>
         </table>  
     </form>
@@ -32,187 +33,239 @@
                         <tbody>
                            <tr>
                                <td>P. Actual</td>
-                               <td><span id="current_price"></span></td>
+                               <td><span class="current_price"></span></td>
                                <td>Contador</td>
-                               <td><span id="contador"></span></td>
+                               <td><span class="contador"></span></td>
                            </tr>
                            <tr>
                                <td>PE</td>
-                               <td><span id="precio_banda"></span></td>
+                               <td><span class="precio_banda"></span></td>
                                <td>Niveles</td>
-                               <td><span id="input_niveles"></span></td>
+                               <td><span class="input_niveles"></span></td>
                            </tr>
                            <tr>
                                <td>Po1_valor</td>
-                               <td><span id="Po1_valor"></span><span id="Po1_valor"></span></td>
+                               <td><span class="Po1_valor"></span><span id="Po1_valor"></span></td>
                                <td>% SL</td>
-                               <td><span id="percentsl"></span></td>
+                               <td><span class="percentsl"></span></td>
                            </tr>
                            <tr>
                                <td>step1_valor</td>
-                               <td><span id="step1_valor"></span></td>
+                               <td><span class="step1_valor"></span></td>
                                <td>% SubSL</td>
-                               <td><span id="perc_SubSL"></span></td>
+                               <td><span class="perc_SubSL"></span></td>
                            </tr>
                            <tr>
                                <td>Po2_valor</td>
-                               <td><span id="Po2_valor"></span></td>
+                               <td><span class="Po2_valor"></span></td>
                                <td>Val SubSL</td>
-                               <td><span id="valor_SubSL"></span></td>
+                               <td><span class="valor_SubSL"></span></td>
                            </tr>
                            <tr>
                                <td>step2_valor</td>
-                               <td><span id="step2_valor"></span></td>
+                               <td><span class="step2_valor"></span></td>
                                <td>Qty Pos Tot</td>
-                               <td><span id="Qty_PosicionTotal"></span></td>
+                               <td><span class="Qty_PosicionTotal"></span></td>
                            </tr>
                            <tr>
                                <td>Po3_valor</td>
-                               <td><span id="Po3_valor"></span></td>
+                               <td><span class="Po3_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>step3_valor</td>
-                               <td><span id="step3_valor"></span></td>
+                               <td><span class="step3_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>Po4_valor</td>
-                               <td><span id="Po4_valor"></span></td>
+                               <td><span class="Po4_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>step4_valor</td>
-                               <td><span id="step4_valor"></span></td>
+                               <td><span class="step4_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>Po5_valor</td>
-                               <td><span id="Po5_valor"></span></td>
+                               <td><span class="Po5_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>step5_valor</td>
-                               <td><span id="step5_valor"></span></td>
+                               <td><span class="step5_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>Po6_valor</td>
-                               <td><span id="Po6_valor"></span></td>
+                               <td><span class="Po6_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>step6_valor</td>
-                               <td><span id="step6_valor"></span></td>
+                               <td><span class="step6_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>Po7_valor</td>
-                               <td><span id="Po7_valor"></span></td>
+                               <td><span class="Po7_valor"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                            <tr>
                                <td>Lim Inf</td>
-                               <td><span id="limite_inferior"></span></td>
+                               <td><span class="limite_inferior"></span></td>
                                <td>-</td>
-                               <td><span id=""></span></td>
+                               <td><span class=""></span></td>
                            </tr>
                        </tbody>
                         </table>
                     </td>
-                    <td>2</td>
+                    <td style="vertical-align: top;">
+                        <table class="tablafija"><!--TABLA DE MAT EXEL-->
+                            <tbody>
+                                <tr>
+                                  <td></td>       
+                                  <td>Recorrido %</td>
+                                  <td>TP esperado</td>
+                                  <td>Qty USDT</td>
+                                  <td>Qty Var</td>
+                                  <td>T4</td>
+                                  <td>T5</td>
+                                  <td>T6</td>
+                                </tr>
+                                <tr>
+                                  <td>Po1</td>
+                                  <td><span class="recorrido_perc1"></span></td>
+                                  <td><span class="PF_esperado1"></span></td>
+                                  <td><span class="Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="Qty_mVar1"></span></td>
+                                  <td><span class="T4_valorperdida"></span></td> 
+                                  <td><span class="T5_valorperdida"></span></td>       
+                                  <td><span class="T6_valorperdida"></span></td>
+                                </tr>
+                                <tr>
+                                  <td>Po2</td>
+                                  <td><span class="recorrido_perc2"></span></td>
+                                  <td><span class="PF_esperado2"></span></td>
+                                  <td><span class="Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="Qty_mVar2"></span></td>
+                                  <td><span class="T4_percperdida"></span></td> 
+                                  <td><span class="T5_percperdida"></span></td>       
+                                  <td><span class="T6_percperdida"></span></td>
+                                </tr>
+                                <tr>
+                                  <td>Po3</td>
+                                  <td><span class="recorrido_perc3"></span></td>
+                                  <td><span class="PF_esperado3"></span></td>
+                                  <td><span class="Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="Qty_mVar3"></span></td>
+                                  <td><span class="T4_MaxUSDTQty"></span></td> 
+                                  <td><span class="T5_MaxUSDTQty"></span></td>       
+                                  <td><span class="T6_MaxUSDTQty"></span></td>
+                                </tr>
+                                <tr>
+                                  <td>Po4</td>
+                                  <td><span class="recorrido_perc4"></span></td>
+                                  <td><span class="PF_esperado4"></span></td>
+                                  <td><span class="Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="Qty_mVar4"></span></td>
+                                  <td colspan="3" rowspan="5"></td>
+                                </tr>
+                                <tr>
+                                  <td>Po5</td>
+                                  <td><span class="recorrido_perc5"></span></td>
+                                  <td><span class="PF_esperado5"></span></td>
+                                  <td><span class="Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="Qty_mVar5"></span></td>
+                                </tr>
+                                <tr>
+                                  <td>Po6</td>
+                                  <td><span class="recorrido_perc6"></span></td>
+                                  <td><span class="PF_esperado6"></span></td>
+                                  <td><span class="Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="Qty_mVar6"></span></td>
+                                </tr>
+                                <tr>
+                                  <td>Po7</td>
+                                  <td><span class="recorrido_perc7"></span></td>
+                                  <td><span class="PF_esperado7"></span></td>
+                                  <td><span class="Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="Qty_mVar7"></span></td>
+                                </tr>
+                                <tr>
+                                  <td></td>
+                                  <td><span class="sum_recorrrido_perc"></span></td>
+                                  <td><span class="sum_PF_esperado"></span></td>
+                                  <td><span class="sum_Qty_USDT_SubPosicion"></span></td>
+                                  <td><span class="sum_Qty_mVar"></span></td>
+                                </tr>
+                        </tbody>
+                        </table>
+                    </td>
                     <td>3</td>
                 </tr>
                 <tr>
                     <td>
-                        <table class="tablafija"><!--TABLA DE MAT EXEL-->
-                        <tbody>
+                        <table class="tablafija">
+                            <tbody>
                             <tr>
-                              <td></td>       
-                              <td>Recorrido %</td>
-                              <td>TP esperado</td>
-                              <td>Qty USDT</td>
-                              <td>Qty Var</td>
-                              <td>T4</td>
-                              <td>T5</td>
-                              <td>T6</td>
+                              <td colspan="4">N1</th>
+                              <td>0</th>
+                            </tr>
+                            <tr>  
+                              <td>SL</td>
+                              <td><span class="precio_banda"></span></td>
+                              <td>Estado</td>
+                              <td><span class="control_pos1"></span></td>
+                              <td>1</td>
                             </tr>
                             <tr>
                               <td>Po1</td>
-                              <td><span id="recorrido_perc1"></span></td>
-                              <td><span id="PF_esperado1"></span></td>
-                              <td><span id="Qty_USDT_SubPosicion"></span></td>
-                              <td><span id="Qty_mVar1"></span></td>
-                              <td><span id="T4_valorperdida"></span></td> 
-                              <td><span id="T5_valorperdida"></span></td>       
-                              <td><span id="T6_valorperdida"></span></td>
+                              <td><span class="Po1_valor"></span></td>
+                              <td>T</td>
+                              <td>toques </td>
+                              <td>1</td>
                             </tr>
                             <tr>
-                              <td>Po2</td>
-                              <td><span id="recorrido_perc2"></span></td>
-                              <td><span id="PF_esperado2"></span></td>
-                              <td></td>
-                              <td><span id="Qty_mVar2"></span></td>
-                              <td><span id="T4_percperdida"></span></td> 
-                              <td><span id="T5_percperdida"></span></td>       
-                              <td><span id="T6_percperdida"></span></td>
+                              <td>TP</td>
+                              <td><span class="step1_valor"></span></td>
+                              <td>Est TP</td>
+                              <td><span class="control_TP1"></span></td>
+                              <td>1</td>
                             </tr>
                             <tr>
-                              <td>Po3</td>
-                              <td><span id="recorrido_perc3"></span></td>
-                              <td><span id="PF_esperado3"></span></td>
-                              <td></td>
-                              <td><span id="Qty_mVar3"></span></td>
-                              <td><span id="T4_MaxUSDTQty"></span></td> 
-                              <td><span id="T5_MaxUSDTQty"></span></td>       
-                              <td><span id="T6_MaxUSDTQty"></span></td>
+                              <td>Val Puro</td>
+                              <td>valpuro</td>
+                              <td>Val a Rec</td>
+                              <td>val a recuperar</td>
+                              <td>1</td>
                             </tr>
                             <tr>
-                              <td>Po4</td>
-                              <td><span id="recorrido_perc4"></span></td>
-                              <td><span id="PF_esperado4"></span></td>
-                              <td></td>
-                              <td><span id="Qty_mVar4"></span></td>
-                              <td colspan="3" rowspan="5"></td>
+                              <td>Val Rec</td>
+                              <td>valrec</td>
+                              <td>libre</td>
+                              <td>libre</td>
+                              <td>1</td>
                             </tr>
                             <tr>
-                              <td>Po5</td>
-                              <td><span id="recorrido_perc5"></span></td>
-                              <td><span id="PF_esperado5"></span></td>
-                              <td></td>
-                              <td><span id="Qty_mVar5"></span></td>
+                              <td>Val total</td>
+                              <td>val total</td>
+                              <td>libre</td>
+                              <td>libre</td>
+                              <td>1</td>
                             </tr>
-                            <tr>
-                              <td>Po6</td>
-                              <td><span id="recorrido_perc6"></span></td>
-                              <td><span id="PF_esperado6"></span></td>
-                              <td></td>
-                              <td><span id="Qty_mVar6"></span></td>
-                            </tr>
-                            <tr>
-                              <td>Po7</td>
-                              <td><span id="recorrido_perc7"></span></td>
-                              <td><span id="PF_esperado7"></span></td>
-                              <td></td>
-                              <td><span id="Qty_mVar7"></span></td>
-                            </tr>
-                            <tr>
-                              <td></td>
-                              <td><span id="sum_recorrrido_perc"></span></td>
-                              <td><span id="sum_PF_esperado"></span></td>
-                              <td><span id="sum_Qty_USDT_SubPosicion"></span></td>
-                              <td><span id="sum_Qty_mVar"></span></td>
-                            </tr>
-                          </tbody></table>
+                          </tbody>
+                          </table>
                     </td>        
                     <td>2</td>
                     <td>3</td>
@@ -227,64 +280,66 @@
     <script>
         function actualizarDatos() {
             $.getJSON('/datos', function(data) { //Aca solo deben ir los datos que se actualizan constantemente con el socket.
-                $('#current_price').text(data.Cprecio);
-                $('#precio_banda').text(data.precio_banda);  
-                $('#contador').text(data.contador);
-                $('#limite_inferior').text(data.limite_inferior);      
-                $('#Po1_valor').text(data.Po1_valor);     
-                $('#Po2_valor').text(data.Po2_valor);
-                $('#Po3_valor').text(data.Po3_valor);
-                $('#Po4_valor').text(data.Po4_valor);
-                $('#Po5_valor').text(data.Po5_valor);
-                $('#Po6_valor').text(data.Po6_valor);
-                $('#Po7_valor').text(data.Po7_valor); 
-                $('#step1_valor').text(data.step1_valor);
-                $('#step2_valor').text(data.step2_valor); 
-                $('#step3_valor').text(data.step3_valor); 
-                $('#step4_valor').text(data.step4_valor); 
-                $('#step5_valor').text(data.step5_valor); 
-                $('#step6_valor').text(data.step6_valor);  
-                $('#input_niveles').text(data.input_niveles);
-                $('#percentsl').text(data.percentsl);
-                $('#recorrido_perc1').text(data.recorrido_perc1);
-                $('#recorrido_perc2').text(data.recorrido_perc2);
-                $('#recorrido_perc3').text(data.recorrido_perc3);
-                $('#recorrido_perc4').text(data.recorrido_perc4);
-                $('#recorrido_perc5').text(data.recorrido_perc5);
-                $('#recorrido_perc6').text(data.recorrido_perc6);
-                $('#recorrido_perc7').text(data.recorrido_perc7);
-                $('#sum_recorrrido_perc').text(data.sum_recorrrido_perc);
-                $('#Qty_PosicionTotal').text(data.Qty_PosicionTotal);
-                $('#PF_esperado1').text(data.PF_esperado1);
-                $('#PF_esperado2').text(data.PF_esperado2);
-                $('#PF_esperado3').text(data.PF_esperado3);
-                $('#PF_esperado4').text(data.PF_esperado4);
-                $('#PF_esperado5').text(data.PF_esperado5);
-                $('#PF_esperado6').text(data.PF_esperado6);
-                $('#PF_esperado7').text(data.PF_esperado7);
-                $('#sum_PF_esperado').text(data.sum_PF_esperado);
-                $('#Qty_USDT_SubPosicion').text(data.Qty_USDT_SubPosicion);
-                $('#sum_Qty_USDT_SubPosicion').text(data.sum_Qty_USDT_SubPosicion);
-                $('#Qty_mVar1').text(data.Qty_mVar1);
-                $('#Qty_mVar2').text(data.Qty_mVar2);
-                $('#Qty_mVar3').text(data.Qty_mVar3);
-                $('#Qty_mVar4').text(data.Qty_mVar4);
-                $('#Qty_mVar5').text(data.Qty_mVar5);
-                $('#Qty_mVar6').text(data.Qty_mVar6);
-                $('#Qty_mVar7').text(data.Qty_mVar7);
-                $('#sum_Qty_mVar').text(data.sum_Qty_mVar);
-                $('#perc_SubSL').text(data.perc_SubSL);
-                $('#valor_SubSL').text(data.valor_SubSL);
-                $('#T4_valorperdida').text(data.T4_valorperdida);
-                $('#T5_valorperdida').text(data.T5_valorperdida);
-                $('#T6_valorperdida').text(data.T6_valorperdida);
-                $('#T4_percperdida').text(data.T4_percperdida);
-                $('#T5_percperdida').text(data.T5_percperdida);
-                $('#T6_percperdida').text(data.T6_percperdida);
-                $('#T4_MaxUSDTQty').text(data.T4_MaxUSDTQty);
-                $('#T5_MaxUSDTQty').text(data.T5_MaxUSDTQty);
-                $('#T6_MaxUSDTQty').text(data.T6_MaxUSDTQty);
-               
+                $('.current_price').text(data.Cprecio);
+                $('.precio_banda').text(data.precio_banda);  
+                $('.contador').text(data.contador);
+                $('.limite_inferior').text(data.limite_inferior);      
+                $('.Po1_valor').text(data.Po1_valor);     
+                $('.Po2_valor').text(data.Po2_valor);
+                $('.Po3_valor').text(data.Po3_valor);
+                $('.Po4_valor').text(data.Po4_valor);
+                $('.Po5_valor').text(data.Po5_valor);
+                $('.Po6_valor').text(data.Po6_valor);
+                $('.Po7_valor').text(data.Po7_valor); 
+                $('.step1_valor').text(data.step1_valor);
+                $('.step2_valor').text(data.step2_valor); 
+                $('.step3_valor').text(data.step3_valor); 
+                $('.step4_valor').text(data.step4_valor); 
+                $('.step5_valor').text(data.step5_valor); 
+                $('.step6_valor').text(data.step6_valor);  
+                $('.input_niveles').text(data.input_niveles);
+                $('.percentsl').text(data.percentsl);
+                $('.recorrido_perc1').text(data.recorrido_perc1);
+                $('.recorrido_perc2').text(data.recorrido_perc2);
+                $('.recorrido_perc3').text(data.recorrido_perc3);
+                $('.recorrido_perc4').text(data.recorrido_perc4);
+                $('.recorrido_perc5').text(data.recorrido_perc5);
+                $('.recorrido_perc6').text(data.recorrido_perc6);
+                $('.recorrido_perc7').text(data.recorrido_perc7);
+                $('.sum_recorrrido_perc').text(data.sum_recorrrido_perc);
+                $('.Qty_PosicionTotal').text(data.Qty_PosicionTotal);
+                $('.PF_esperado1').text(data.PF_esperado1);
+                $('.PF_esperado2').text(data.PF_esperado2);
+                $('.PF_esperado3').text(data.PF_esperado3);
+                $('.PF_esperado4').text(data.PF_esperado4);
+                $('.PF_esperado5').text(data.PF_esperado5);
+                $('.PF_esperado6').text(data.PF_esperado6);
+                $('.PF_esperado7').text(data.PF_esperado7);
+                $('.sum_PF_esperado').text(data.sum_PF_esperado);
+                $('.Qty_USDT_SubPosicion').text(data.Qty_USDT_SubPosicion);
+                $('.sum_Qty_USDT_SubPosicion').text(data.sum_Qty_USDT_SubPosicion);
+                $('.Qty_mVar1').text(data.Qty_mVar1);
+                $('.Qty_mVar2').text(data.Qty_mVar2);
+                $('.Qty_mVar3').text(data.Qty_mVar3);
+                $('.Qty_mVar4').text(data.Qty_mVar4);
+                $('.Qty_mVar5').text(data.Qty_mVar5);
+                $('.Qty_mVar6').text(data.Qty_mVar6);
+                $('.Qty_mVar7').text(data.Qty_mVar7);
+                $('.sum_Qty_mVar').text(data.sum_Qty_mVar);
+                $('.perc_SubSL').text(data.perc_SubSL);
+                $('.valor_SubSL').text(data.valor_SubSL);
+                $('.T4_valorperdida').text(data.T4_valorperdida);
+                $('.T5_valorperdida').text(data.T5_valorperdida);
+                $('.T6_valorperdida').text(data.T6_valorperdida);
+                $('.T4_percperdida').text(data.T4_percperdida);
+                $('.T5_percperdida').text(data.T5_percperdida);
+                $('.T6_percperdida').text(data.T6_percperdida);
+                $('.T4_MaxUSDTQty').text(data.T4_MaxUSDTQty);
+                $('.T5_MaxUSDTQty').text(data.T5_MaxUSDTQty);
+                $('.T6_MaxUSDTQty').text(data.T6_MaxUSDTQty);
+                $('.control_pos1').text(data.control_pos1);
+                $('.control_TP1').text(data.control_TP1);
+                
 
                 
                 

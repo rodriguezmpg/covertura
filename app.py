@@ -75,10 +75,9 @@ def datos():
         'T4_MaxUSDTQty': round(trading_loop.lp.T4_MaxUSDTQty,2),
         'T5_MaxUSDTQty': round(trading_loop.lp.T5_MaxUSDTQty,2),
         'T6_MaxUSDTQty': round(trading_loop.lp.T6_MaxUSDTQty,2),
-        
 
-
-        
+        'control_pos1': trading_loop.rt.control_pos1,
+        'control_TP1': trading_loop.rt.control_TP1
       
     })
 
@@ -94,8 +93,9 @@ def start_trading():
     niveles_post_form = request.form.get('niveles_post_form')
     sl_post_form = request.form.get('sl_post_form')
     sloption_post_form = request.form.get('sloption_post_form')
+    current_price_form = request.form.get('current_price_post_form') #Para simular el precio luego borrar 
 
-    asyncio.run(trading_loop.start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form))
+    asyncio.run(trading_loop.start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form, current_price_form))
     
     return render_template('main_loop.html')
 

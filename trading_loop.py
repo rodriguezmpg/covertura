@@ -16,7 +16,7 @@ client = Client(APY_KEY,APY_SECRET, tld='com')
 symbol = 'ETHUSDT'
 
 
-class LoopData: ##VARIABLES UTILIZADAS EN LA SIMULACION
+class FixedData: ##VARIABLES UTILIZADAS EN LA SIMULACION
     def __init__(self):
         self.precio_banda = 0.00
         self.current_price = 0.00
@@ -90,13 +90,13 @@ class LoopData: ##VARIABLES UTILIZADAS EN LA SIMULACION
         self.T4_MaxUSDTQty = 0.00
         self.T5_MaxUSDTQty = 0.00
         self.T6_MaxUSDTQty = 0.00
-        
+
+lp = FixedData()
 
 
 
-
-
-        #variables de posiciones (capaz hacemos otra clase)
+class RealTime: ##VARIABLES UTILIZADAS EN LAS POSICIONES
+    def __init__(self):
         self.control_pos1 = False
         self.control_pos2 = False
         self.control_pos3 = False
@@ -113,12 +113,36 @@ class LoopData: ##VARIABLES UTILIZADAS EN LA SIMULACION
         self.control_TP6 = False
         self.control_TP7 = False
 
-        
-lp = LoopData()
+        self.PE_Pos1 = 0.00 
+        self.PE_Pos2 = 0.00
+        self.PE_Pos3 = 0.00
+        self.PE_Pos4 = 0.00
+        self.PE_Pos5 = 0.00
+        self.PE_Pos6 = 0.00
+        self.PE_Pos7 = 0.00
+
+        self.TP_Pos1 = 0.00
+        self.TP_Pos2 = 0.00
+        self.TP_Pos3 = 0.00
+        self.TP_Pos4 = 0.00
+        self.TP_Pos5 = 0.00
+        self.TP_Pos6 = 0.00
+        self.TP_Pos7 = 0.00
+
+        self.SL_Pos1 = 0.00
+        self.SL_Pos2 = 0.00
+        self.SL_Pos3 = 0.00
+        self.SL_Pos4 = 0.00
+        self.SL_Pos5 = 0.00
+        self.SL_Pos6 = 0.00
+        self.SL_Pos7 = 0.00
+
+rt = RealTime()
+
 
 
 def calculos(msg):
-    lp.current_price = float(msg['c'])  # 'c' es el precio actual del ticker
+    #lp.current_price = float(msg['c'])  # 'c' es el precio actual del ticker
     if lp.current_price != lp.previous_price:
         lp.previous_price = lp.current_price
         print(f"Precio: {lp.current_price}  - Precio banda {lp.current_price}") 
@@ -205,15 +229,23 @@ def calculos(msg):
 
 
         #LOGICA DE POSICIONES
+        if lp.current_price < lp.Po1_valor and not rt.control_pos1: #POS1
+            rt.control_pos1 = True
 
-        if lp.current_price < lp.Po1_valor and not lp.control_pos1: #POS1
-            lp.control_pos1 = True
+            rt.PE_Pos1 = lp.current_price #Toma el valor del precio de entrada (para hacer una primera etimacion del splittage)
+            
+            # lp.perc_SubSL
 
-        if lp.current_price < lp.step1_valor and not lp.control_TP1: #TP1
-            lp.control_TP1 = True
+            # rt.TP_Pos1
+            # rt.SL_Pos1
 
-        if lp.current_price > lp.precio_banda and lp.control_pos1: #SL1
-            lp.control_pos1 = False
+
+        if lp.current_price < lp.step1_valor and not rt.control_TP1: #TP1
+            rt.control_TP1 = True
+
+        if lp.current_price > lp.precio_banda and rt.control_pos1: #SL1
+            rt.control_pos1 = False
+            rt.control_TP1 = False
 
         
         
@@ -222,8 +254,8 @@ def calculos(msg):
 
 
 
-
-async def start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form):
+#Puesta en funcionamiento del sokcket de binance llamando a la funcion principal.
+async def start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form, current_price_form):
     bsm = BinanceSocketManager(client)
     socket = bsm.symbol_ticker_socket(symbol)
 
@@ -232,15 +264,13 @@ async def start_socket(precio_banda_post, niveles_post_form, sl_post_form, slopt
     lp.input_niveles = int(niveles_post_form)
     lp.input_sloption  = int(sloption_post_form)
     lp.input_sl = float(sl_post_form)
-    lp.capital_base = 10000
-    
+    lp.capital_base = 10000 
+    lp.current_price = float(current_price_form)
 
     async with socket as s:
         while True:
             msg = await s.recv()  
             calculos(msg)
-
-
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
@@ -249,13 +279,11 @@ if __name__ == '__main__':
 
 
 
-
-
-# def crear_csv():
-#     with open("static/datos.csv", mode='w', newline='', encoding='utf-8') as archivo:
-#         pass  
-#     print("Archivo CSV creado o vaciado exitosamente.")
-# crear_csv()  
+def crear_csv():
+    with open("static/registro_posiciones.csv", mode='w', newline='', encoding='utf-8') as archivo:
+        pass  
+    print("Archivo CSV creado o vaciado exitosamente.")
+crear_csv()  
 
 
 
