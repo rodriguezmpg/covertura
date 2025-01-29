@@ -78,8 +78,8 @@ def datos():
         'Qty_mVar7': round(trading_loop.lp.Qty_mVar7 ,3), 
         'sum_Qty_mVar': round(trading_loop.lp.sum_Qty_mVar ,3), 
 
-        'perc_SubSL': round(trading_loop.lp.perc_SubSL ,4), 
-        'valor_SubSL': round(trading_loop.lp.valor_SubSL ,2),
+        'perc_SubSL1': round(trading_loop.lp.perc_SubSL1 ,4), 
+        'valor_SubSL1': round(trading_loop.lp.valor_SubSL1 ,2),
 
         'T4_valorperdida': round(trading_loop.lp.T4_valorperdida,2),
         'T5_valorperdida': round(trading_loop.lp.T5_valorperdida,2),
@@ -101,6 +101,19 @@ def datos():
         
         'TP_Pos1': round(trading_loop.rt.TP_Pos1,2),
 
+        'rt_Qty_USDT_SubPosicion': round(trading_loop.rt.Qty_USDT_SubPosicion,2),
+
+        'ValorPuro_Pos1': round(trading_loop.rt.ValorPuro_Pos1,2),
+
+        'Qty_mVar1_rec': round(trading_loop.rt.Qty_mVar1_rec,3),
+
+        'balance_pos1': round(trading_loop.rt.balance_pos1,2),
+        
+        'cont_hits1': round(trading_loop.rt.cont_hits1,2),
+
+
+         
+
         
       
     })
@@ -121,6 +134,14 @@ def start_trading():
 
     asyncio.run(trading_loop.start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form, current_price_form))
     
+    return render_template('main_loop.html')
+
+@app.route('/simulation')
+def start_simulation():
+
+    #start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form)
+    start = simulador.start_socket(1000, 5, 5, 1) #1 es % 2 es valor del SL
+
     return render_template('main_loop.html')
 
 

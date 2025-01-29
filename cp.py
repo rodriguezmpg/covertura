@@ -31,7 +31,7 @@ def get_public_ip():
         response = requests.get('https://api.ipify.org?format=json')  # Usa este servicio
         if response.status_code == 200:
             data = response.json()
-            return data['ip']  # Asegúrate de que sea 'ip' y no 'origin'
+            return data['ip']  
         else:
             print(f"Error en la respuesta: {response.status_code}")
             return None

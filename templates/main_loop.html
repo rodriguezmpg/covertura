@@ -14,9 +14,9 @@
     <form action="/mainstart" method="POST" enctype="multipart/form-data">
         <table class="tablaform">
                <tr>
-                   <td>PE <input type="text" name="precio_banda_post_form" value="" size="4"></td>
+                   <td>PE <input type="text" name="precio_banda_post_form" size="4" value="1000"></td>
                    <td>Niveles <select name="niveles_post_form" style="width: 50px;"><option value="5" selected>5</option><option value="7">7</option></select></td>
-                   <td>SL<select name="sloption_post_form" style="width: 70px;"><option value="1" selected>%</option><option value="2">Valor</option></select> <input type="text" name="sl_post_form" value="" size="4"></td>
+                   <td>SL<select name="sloption_post_form" style="width: 70px;"><option value="1" selected>%</option><option value="2">Valor</option></select> <input type="text" name="sl_post_form" value="10" size="4"></td>
                    <td>CP <input type="text" name="current_price_post_form" value="" size="4"></td>
                    <td><button type="submit">Simular</button></td>
                </tr>
@@ -52,14 +52,14 @@
                            <tr>
                                <td>step1_valor</td>
                                <td><span class="step1_valor"></span></td>
-                               <td>% SubSL</td>
-                               <td><span class="perc_SubSL"></span></td>
+                               <td>-</td>
+                               <td>-</td>
                            </tr>
                            <tr>
                                <td>Po2_valor</td>
                                <td><span class="Po2_valor"></span></td>
-                               <td>Val SubSL</td>
-                               <td><span class="valor_SubSL"></span></td>
+                               <td>-</td>
+                               <td>-</td>
                            </tr>
                            <tr>
                                <td>step2_valor</td>
@@ -235,8 +235,8 @@
                               <td><span class="Po1_valor"></span></td> 
                               <td>PE</td>
                               <td><span class="PE_Pos1"></span></td>
-                              <td>T</td>
-                              <td>toques </td>
+                              <td>Hits</td>
+                              <td><span class="cont_hits1"></span></td>
                             </tr>
                             <tr>
                               <td>TP(lp)</td>
@@ -248,27 +248,27 @@
                             </tr>
                             <tr>
                               <td>Val Puro</td>
-                              <td>valpuro</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>Val a Rec</td>
-                              <td>val a recuperar</td>
+                              <td><span class="ValorPuro_Pos1"></span></td>
+                              <td>QtyUSDT (rt)</td>
+                              <td><span class="rt_Qty_USDT_SubPosicion"></span></td>
+                              <td>QtyRec</td>
+                              <td><span class="Qty_mVar1_rec"></span></td>
                             </tr>
                             <tr>
-                              <td>Val Rec</td>
-                              <td>valrec</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>libre</td>
-                              <td>libre</td>
+                              <td>V SubSL(lp)</td>
+                              <td><span class="valor_SubSL1"></span></td>
+                              <td>Balance</td>
+                              <td><span class="balance_pos1"></span></td>
+                              <td></td>
+                              <td></td>
                             </tr>
                             <tr>
-                              <td>Val total</td>
-                              <td>val total</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>libre</td>
-                              <td>libre</td>
+                              <td>% SubSL(lp)</td>
+                              <td><span class="perc_SubSL1"></span></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
                             </tr>
                           </tbody>
                           </table>
@@ -332,8 +332,8 @@
                 $('.Qty_mVar6').text(data.Qty_mVar6);
                 $('.Qty_mVar7').text(data.Qty_mVar7);
                 $('.sum_Qty_mVar').text(data.sum_Qty_mVar);
-                $('.perc_SubSL').text(data.perc_SubSL);
-                $('.valor_SubSL').text(data.valor_SubSL);
+                $('.perc_SubSL1').text(data.perc_SubSL1);
+                $('.valor_SubSL1').text(data.valor_SubSL1);
                 $('.T4_valorperdida').text(data.T4_valorperdida);
                 $('.T5_valorperdida').text(data.T5_valorperdida);
                 $('.T6_valorperdida').text(data.T6_valorperdida);
@@ -348,82 +348,81 @@
                 $('.PE_Pos1').text(data.PE_Pos1);
                 $('.TP_Pos1').text(data.TP_Pos1);
                 $('.SL_Pos1').text(data.SL_Pos1);
-               
-
+                $('.rt_Qty_USDT_SubPosicion').text(data.rt_Qty_USDT_SubPosicion);
+                $('.ValorPuro_Pos1').text(data.ValorPuro_Pos1);
+                $('.Qty_mVar1_rec').text(data.Qty_mVar1_rec);
+                $('.balance_pos1').text(data.balance_pos1);
+                $('.cont_hits1').text(data.cont_hits1);
                 
                 })
         }           
         setInterval(actualizarDatos, 200);
     </script>
 
+<div id="tableContainer"></div>
 
-    <script>
-        const csvURL = '/static/datos.csv';
-    
-        function cargarCSV() {
-            fetch(csvURL)
-                .then(response => response.text())
-                .then(csvData => {
-                    // Parsear el CSV usando PapaParse
-                    Papa.parse(csvData, {
-                        header: false,
-                        skipEmptyLines: true,
-                        complete: function(results) {
-                            const data = results.data;
-                            const tableBody = document.getElementById("tableBody");
-    
-                            // Iterar sobre cada fila de datos en el CSV
-                            data.forEach(row => {
-                                // Crear una nueva fila en la tabla
-                                const tr = document.createElement("tr");
-    
-                                // Añadir celdas a la fila con las variables en la posición deseada
-                                tr.innerHTML = `   <td>
-                                <table class="interna">
-                                    <tbody>
-                                        <tr>
-                                            <td>${row[0]}</td>
-                                            <td>PE</td>
-                                            <td>PS</td>
-                                            <td>PnL SL</td>
-                                            <td>Dif %</td>
-                                            <td>TP</td>
-                                            <td>Pnl TP</td>
-                                            <td>TP Price</td>
-                                            <td>TP P Ej</td>
-                                            <td>Apertura</td>
-                                            <td>Cierre</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>${row[1]}</td>
-                                            <td>${row[2]}</td>
-                                            <td>${row[3]}</td>
-                                            <td>${row[4]}</td>
-                                            <td>${row[5]}</td>
-                                            <td>${row[6]}</td>
-                                            <td>${row[7]}</td>
-                                            <td>${row[8]}</td>
-                                            <td>${row[9]}</td>
-                                            <td>${row[10]}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>`
-                                   
-    
-                                // Añadir la fila a la tabla
-                                tableBody.appendChild(tr);
-                            });
-                        }
-                    });
-                })
-                .catch(error => console.error('Error al cargar el archivo CSV:', error));
-        }
-    
-        // Llamar a la función para cargar el CSV cuando la página esté lista
-        document.addEventListener('DOMContentLoaded', cargarCSV);
-    </script>
+<script>
+    const csvURL = '/static/registro_posiciones.csv';
+
+    function cargarCSV() {
+        fetch(csvURL + '?_=' + new Date().getTime()) // Evita caché
+            .then(response => response.text())
+            .then(csvData => {
+                Papa.parse(csvData, {
+                    header: false,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        const data = results.data;
+                        const tableContainer = document.getElementById("tableContainer");
+
+                        // Limpiar el contenedor antes de volver a cargar los datos
+                        tableContainer.innerHTML = '';
+
+                        // Iterar sobre cada fila del CSV y generar una tabla por fila
+                        data.forEach(row => {
+                            const table = document.createElement("table");
+                            table.innerHTML = `
+                                <tbody>
+                                    <tr>
+                                        <td>ID</th>
+                                        <td>Type</th>
+                                        <td>SL</th>
+                                        <td>PE</th>
+                                        <td>TP</th>
+                                        <td>Qty$</th>
+                                        <td>QtyMVar</th>
+                                        <td>QtyRec</th>
+                                        <td>QtyTot</th>
+                                        <td>Hits</th>
+                                    </tr>
+                                    <tr>
+                                        <td>${row[0]}</td>
+                                        <td>${row[1]}</td>
+                                        <td>${row[2]}</td>
+                                        <td>${row[3]}</td>
+                                        <td>${row[4]}</td>
+                                        <td>${row[5]}</td>
+                                        <td>${row[6]}</td>
+                                        <td>${row[7]}</td>
+                                        <td>${row[8]}</td>
+                                        <td>${row[9]}</td>
+                                    </tr>
+                                </tbody>
+                            `;
+                            // Agregar la tabla al contenedor
+                            tableContainer.appendChild(table);
+                        });
+                    }
+                });
+            })
+            .catch(error => console.error('Error al cargar el archivo CSV:', error));
+    }
+
+    // Llamar a la función al cargar la página y actualizar cada segundo
+    document.addEventListener('DOMContentLoaded', cargarCSV);
+    setInterval(cargarCSV, 1000);
+</script>
+
 
 </body>
 </html>

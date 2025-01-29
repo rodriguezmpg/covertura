@@ -3,7 +3,7 @@ body {
 } 
 
 /* Estilos para las celdas de datos */
-.tablafija td {
+.tablafija td, th {
     background-color: rgba(0, 0, 0, 0.05);    /* Fondo gris claro y transparente */
     padding: 10px;
     color: #333;                              /* Color de texto */

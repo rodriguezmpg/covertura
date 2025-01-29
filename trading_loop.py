@@ -21,7 +21,7 @@ class FixedData: ##VARIABLES UTILIZADAS EN LA SIMULACION
         self.precio_banda = 0.00
         self.current_price = 0.00
         self.previous_price = 0.00
-        self.percentsl = 0.00
+        self.percentsl = 0.00 #es la distancia porcentual entre el PE y el limite inferior.
         self.input_sl = 0.00
         self.limite_inferior = 0.00
         self.contador = 0
@@ -31,8 +31,10 @@ class FixedData: ##VARIABLES UTILIZADAS EN LA SIMULACION
         self.input_sloption = 0
         self.capital_base = 0.00
         self.Qty_PosicionTotal = 0.00 #Tamanio total de la posicion a cubrir
-        self.valor_SubSL = 0.00
-        self.perc_SubSL = 0.00
+
+        self.valor_SubSL1 = 0.00
+
+        self.perc_SubSL1 = 0.00
 
         self.contador_secuencia = 0
 
@@ -94,7 +96,6 @@ class FixedData: ##VARIABLES UTILIZADAS EN LA SIMULACION
 lp = FixedData()
 
 
-
 class RealTime: ##VARIABLES UTILIZADAS EN LAS POSICIONES
     def __init__(self):
         self.control_pos1 = False
@@ -137,152 +138,241 @@ class RealTime: ##VARIABLES UTILIZADAS EN LAS POSICIONES
         self.SL_Pos6 = 0.00
         self.SL_Pos7 = 0.00
 
-        self.Qty_USDT_SubPosicion = 0.00
+        self.Qty_USDT_SubPosicion = 0.00 
+
+        self.PnL_SL1 = 0.00
+
+        self.Qty_mVar1 = 0.000
+        self.Qty_mVar1_rec = 0.000
+        self.Qty_mVar1_rec_acum = 0.000
 
         self.ValorPuro_Pos1 = 0.00
-        self.ValorPuro_Pos2 = 0.00
-        self.ValorPuro_Pos3 = 0.00
-        self.ValorPuro_Pos4 = 0.00
-        self.ValorPuro_Pos5 = 0.00
-        self.ValorPuro_Pos6 = 0.00
-        self.ValorPuro_Pos7 = 0.00
 
-        self.ValorRec_Pos1 = 0.00
-        self.ValorRec_Pos2 = 0.00
-        self.ValorRec_Pos3 = 0.00
-        self.ValorRec_Pos4 = 0.00
-        self.ValorRec_Pos5 = 0.00
-        self.ValorRec_Pos6 = 0.00
-        self.ValorRec_Pos7 = 0.00
+        self.balance_pos1 = 0.00 
 
-        self.ValorTotal_Pos1 = 0.00
-        self.ValorTotal_Pos2 = 0.00
-        self.ValorTotal_Pos3 = 0.00
-        self.ValorTotal_Pos4 = 0.00
-        self.ValorTotal_Pos5 = 0.00
-        self.ValorTotal_Pos6 = 0.00
-        self.ValorTotal_Pos7 = 0.00
+        self.PE_TP_Pos1 = 0.00 #Precio al que se ejecuto el TP
+        self.PE_SL_Pos1 = 0.00 #Precio al que se ejecuto el TP
 
+        self.cont_hits1 = 0  
+ 
 rt = RealTime()
 
+class WCSV: ##VARIABLES UTILIZADAS EN EL CSV
+    def __init__(self):
+        self.id_posicion = 0
+        self.type_Pos = ""
+wcsv = WCSV()
 
+#Para borrar la simulacion solamente tengo que dejar lo que esta dentro del FOR
+#    dentro de la funcion calculos() y recordar borrar el timesleep al ultimo
+
+prices = [990,1000,990,1000,990,1000,990,1000,990,1000]
+
+control_simulacion = True
 
 def calculos(msg):
-    #lp.current_price = float(msg['c'])  # 'c' es el precio actual del ticker // Borrar donde puse en las variables post que es un POST
-    if lp.current_price != lp.previous_price:
-        lp.previous_price = lp.current_price
-        print(f"Precio: {lp.current_price}  - Precio banda {lp.current_price}") 
+    global control_simulacion      
+    if control_simulacion:        
+        control_simulacion = False
+        for price in prices:     
+            lp.current_price = price  
+            #lp.current_price = float(msg['c'])  # 'c' es el precio actual del ticker // Borrar donde puse en las variables post que es un POST
+            if lp.current_price != lp.previous_price:
+                lp.previous_price = lp.current_price
+                print(f"Precio: {lp.current_price}  - Precio banda {lp.current_price}") 
 
-        lp.contador = lp.contador + 1  #contador de envios del websocket
+                lp.contador = lp.contador + 1  #contador de envios del websocket
 
-        ## DEFINE EL SL EN BASE A SI ES % O SI ES UN VALOR
-        if lp.input_sloption == 1:
-            lp.percentsl = lp.input_sl
-            lp.limite_inferior = lp.precio_banda - (lp.precio_banda*(lp.percentsl/100))
-        else:
-            lp.limite_inferior = lp.input_sl
-            lp.percentsl = (1-(lp.limite_inferior/lp.precio_banda))*100
+                ## DEFINE EL SL EN BASE A SI ES % O SI ES UN VALOR
+                if lp.input_sloption == 1:
+                    lp.percentsl = lp.input_sl
+                    lp.limite_inferior = lp.precio_banda - (lp.precio_banda*(lp.percentsl/100))
+                else:
+                    lp.limite_inferior = lp.input_sl
+                    lp.percentsl = (1-(lp.limite_inferior/lp.precio_banda))*100
 
-        lp.dist_perc = (lp.precio_banda - lp.limite_inferior) / lp.precio_banda #Distancia porcentual total
-        lp.valor_steps = lp.dist_perc / lp.input_niveles #Valor porcentual de cada escalon
+                lp.dist_perc = (lp.precio_banda - lp.limite_inferior) / lp.precio_banda #Distancia porcentual total
+                lp.valor_steps = lp.dist_perc / lp.input_niveles #Valor porcentual de cada escalon
 
-        lp.Po1_valor  = lp.precio_banda - (lp.precio_banda * (lp.valor_steps/2)) #Valores de apertura de posicion
-        lp.Po2_valor = lp.Po1_valor - (lp.precio_banda * lp.valor_steps)
-        lp.Po3_valor = lp.Po2_valor - (lp.precio_banda * lp.valor_steps)
-        lp.Po4_valor = lp.Po3_valor - (lp.precio_banda * lp.valor_steps)
-        lp.Po5_valor = lp.Po4_valor - (lp.precio_banda * lp.valor_steps)
-        if lp.input_niveles > 5:
-            lp.Po6_valor = lp.Po5_valor - (lp.precio_banda * lp.valor_steps)
-            lp.Po7_valor = lp.Po6_valor - (lp.precio_banda * lp.valor_steps)
+                lp.Po1_valor  = lp.precio_banda - (lp.precio_banda * (lp.valor_steps/2)) #Valores de apertura de posicion
+                lp.Po2_valor = lp.Po1_valor - (lp.precio_banda * lp.valor_steps)
+                lp.Po3_valor = lp.Po2_valor - (lp.precio_banda * lp.valor_steps)
+                lp.Po4_valor = lp.Po3_valor - (lp.precio_banda * lp.valor_steps)
+                lp.Po5_valor = lp.Po4_valor - (lp.precio_banda * lp.valor_steps)
+                if lp.input_niveles > 5:
+                    lp.Po6_valor = lp.Po5_valor - (lp.precio_banda * lp.valor_steps)
+                    lp.Po7_valor = lp.Po6_valor - (lp.precio_banda * lp.valor_steps)
 
-        lp.step1_valor = lp.precio_banda - (lp.precio_banda * lp.valor_steps) #Valores de TP y SL
-        lp.step2_valor = lp.step1_valor - (lp.precio_banda * lp.valor_steps)
-        lp.step3_valor = lp.step2_valor - (lp.precio_banda * lp.valor_steps)
-        lp.step4_valor = lp.step3_valor - (lp.precio_banda * lp.valor_steps)
-        lp.step5_valor = lp.step4_valor - (lp.precio_banda * lp.valor_steps)
-        if lp.input_niveles > 5:lp.step6_valor = lp.step5_valor - (lp.precio_banda * lp.valor_steps)
+                lp.step1_valor = lp.precio_banda - (lp.precio_banda * lp.valor_steps) #Valores de TP y SL
+                lp.step2_valor = lp.step1_valor - (lp.precio_banda * lp.valor_steps)
+                lp.step3_valor = lp.step2_valor - (lp.precio_banda * lp.valor_steps)
+                lp.step4_valor = lp.step3_valor - (lp.precio_banda * lp.valor_steps)
+                lp.step5_valor = lp.step4_valor - (lp.precio_banda * lp.valor_steps)
+                if lp.input_niveles > 5:lp.step6_valor = lp.step5_valor - (lp.precio_banda * lp.valor_steps)
 
+                
+                lp.recorrido_perc1 = (lp.Po1_valor - lp.limite_inferior) / lp.Po1_valor #Recorridos porcentuales
+                lp.recorrido_perc2 = (lp.Po2_valor - lp.limite_inferior) / lp.Po2_valor
+                lp.recorrido_perc3 = (lp.Po3_valor - lp.limite_inferior) / lp.Po3_valor
+                lp.recorrido_perc4 = (lp.Po4_valor - lp.limite_inferior) / lp.Po4_valor
+                lp.recorrido_perc5 = (lp.Po5_valor - lp.limite_inferior) / lp.Po5_valor
+                if lp.input_niveles > 5:
+                    lp.recorrido_perc6 = (lp.Po6_valor - lp.limite_inferior) / lp.Po6_valor
+                    lp.recorrido_perc7 = (lp.Po7_valor - lp.limite_inferior) / lp.Po7_valor
+                lp.sum_recorrrido_perc = lp.recorrido_perc1 + lp.recorrido_perc2 + lp.recorrido_perc3 + lp.recorrido_perc4 + lp.recorrido_perc5 + lp.recorrido_perc6 + lp.recorrido_perc7
 
-        lp.recorrido_perc1 = (lp.Po1_valor - lp.limite_inferior) / lp.Po1_valor #Recorridos porcentuales
-        lp.recorrido_perc2 = (lp.Po2_valor - lp.limite_inferior) / lp.Po2_valor
-        lp.recorrido_perc3 = (lp.Po3_valor - lp.limite_inferior) / lp.Po3_valor
-        lp.recorrido_perc4 = (lp.Po4_valor - lp.limite_inferior) / lp.Po4_valor
-        lp.recorrido_perc5 = (lp.Po5_valor - lp.limite_inferior) / lp.Po5_valor
-        if lp.input_niveles > 5:
-            lp.recorrido_perc6 = (lp.Po6_valor - lp.limite_inferior) / lp.Po6_valor
-            lp.recorrido_perc7 = (lp.Po7_valor - lp.limite_inferior) / lp.Po7_valor
-        lp.sum_recorrrido_perc = lp.recorrido_perc1 + lp.recorrido_perc2 + lp.recorrido_perc3 + lp.recorrido_perc4 + lp.recorrido_perc5 + lp.recorrido_perc6 + lp.recorrido_perc7
+                
+                lp.Qty_PosicionTotal = (lp.capital_base * 5) / (lp.percentsl * 2) #Cual es el total de la posicion en base al capital base para que el SL este en 2,5% de perdida.
+                lp.PF_esperado1 = (lp.recorrido_perc1 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100)) #Calculo del profit esperado de cada SubPosicion
+                lp.PF_esperado2 = (lp.recorrido_perc2 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
+                lp.PF_esperado3 = (lp.recorrido_perc3 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
+                lp.PF_esperado4 = (lp.recorrido_perc4 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
+                lp.PF_esperado5 = (lp.recorrido_perc5 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
+                if lp.input_niveles > 5:
+                    lp.PF_esperado6 = (lp.recorrido_perc6 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
+                    lp.PF_esperado7 = (lp.recorrido_perc7 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
+                lp.sum_PF_esperado = lp.PF_esperado1 + lp.PF_esperado2 + lp.PF_esperado3 + lp.PF_esperado4 + lp.PF_esperado5 +lp.PF_esperado6 + lp.PF_esperado7
 
-        
-        lp.Qty_PosicionTotal = (lp.capital_base * 5) / (lp.percentsl * 2) #Cual es el total de la posicion en base al capital base para que el SL este en 2,5% de perdida.
-        lp.PF_esperado1 = (lp.recorrido_perc1 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100)) #Calculo del profit esperado de cada SubPosicion
-        lp.PF_esperado2 = (lp.recorrido_perc2 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
-        lp.PF_esperado3 = (lp.recorrido_perc3 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
-        lp.PF_esperado4 = (lp.recorrido_perc4 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
-        lp.PF_esperado5 = (lp.recorrido_perc5 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
-        if lp.input_niveles > 5:
-            lp.PF_esperado6 = (lp.recorrido_perc6 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
-            lp.PF_esperado7 = (lp.recorrido_perc7 / lp.sum_recorrrido_perc) * (lp.Qty_PosicionTotal * (lp.percentsl/100))
-        lp.sum_PF_esperado = lp.PF_esperado1 + lp.PF_esperado2 + lp.PF_esperado3 + lp.PF_esperado4 + lp.PF_esperado5 +lp.PF_esperado6 + lp.PF_esperado7
+                lp.Qty_USDT_SubPosicion = lp.PF_esperado1 / lp.recorrido_perc1 #Cantidad de USDT de cada sub posicion
+                if lp.input_niveles > 5:lp.sum_Qty_USDT_SubPosicion = lp.Qty_USDT_SubPosicion * 7
+                else:lp.sum_Qty_USDT_SubPosicion = lp.Qty_USDT_SubPosicion * 5
 
-        lp.Qty_USDT_SubPosicion = lp.PF_esperado1 / lp.recorrido_perc1 #Cantidad de USDT de cada sub posicion
-        if lp.input_niveles > 5:lp.sum_Qty_USDT_SubPosicion = lp.Qty_USDT_SubPosicion * 7
-        else:lp.sum_Qty_USDT_SubPosicion = lp.Qty_USDT_SubPosicion * 5
+                lp.Qty_mVar1 = lp.Qty_USDT_SubPosicion / lp.Po1_valor #Cantidad de moneda de cada sub posicion
+                lp.Qty_mVar2 = lp.Qty_USDT_SubPosicion / lp.Po2_valor
+                lp.Qty_mVar3 = lp.Qty_USDT_SubPosicion / lp.Po3_valor
+                lp.Qty_mVar4 = lp.Qty_USDT_SubPosicion / lp.Po4_valor
+                lp.Qty_mVar5 = lp.Qty_USDT_SubPosicion / lp.Po5_valor
+                if lp.input_niveles > 5:
+                    lp.Qty_mVar6 = lp.Qty_USDT_SubPosicion / lp.Po6_valor
+                    lp.Qty_mVar7 = lp.Qty_USDT_SubPosicion / lp.Po7_valor
+                lp.sum_Qty_mVar = lp.Qty_mVar1 + lp.Qty_mVar2 + lp.Qty_mVar3 + lp.Qty_mVar4 + lp.Qty_mVar5 + lp.Qty_mVar6 + lp.Qty_mVar7
 
-        lp.Qty_mVar1 = lp.Qty_USDT_SubPosicion / lp.Po1_valor #Cantidad de moneda de cada sub posicion
-        lp.Qty_mVar2 = lp.Qty_USDT_SubPosicion / lp.Po2_valor
-        lp.Qty_mVar3 = lp.Qty_USDT_SubPosicion / lp.Po3_valor
-        lp.Qty_mVar4 = lp.Qty_USDT_SubPosicion / lp.Po4_valor
-        lp.Qty_mVar5 = lp.Qty_USDT_SubPosicion / lp.Po5_valor
-        if lp.input_niveles > 5:
-            lp.Qty_mVar6 = lp.Qty_USDT_SubPosicion / lp.Po6_valor
-            lp.Qty_mVar7 = lp.Qty_USDT_SubPosicion / lp.Po7_valor
-        lp.sum_Qty_mVar = lp.Qty_mVar1 + lp.Qty_mVar2 + lp.Qty_mVar3 + lp.Qty_mVar4 + lp.Qty_mVar5 + lp.Qty_mVar6 + lp.Qty_mVar7
+                lp.perc_SubSL1 = (lp.Po1_valor - lp.precio_banda) / lp.Po1_valor #Distancia porcentual de PE y el SL de cada Sub Posicion
+                lp.valor_SubSL1 = lp.perc_SubSL1 * lp.Qty_USDT_SubPosicion #Valor de perdida que me dara el SL de cada Sub Posicion
 
-        lp.perc_SubSL = (lp.percentsl / 100) / (lp.input_niveles * 2) #Distancia porcentual de PE y el SL de cada Sub Posicion
-        lp.valor_SubSL = lp.perc_SubSL * lp.Qty_USDT_SubPosicion #Valor de perdida que me dara el SL de cada Sub Posicion
-        
-        lp.T4_valorperdida = lp.valor_SubSL * (2**4) #valor de la perdida en cada toque
-        lp.T5_valorperdida = lp.valor_SubSL * (2**5)
-        lp.T6_valorperdida = lp.valor_SubSL * (2**6)
-        lp.T4_percperdida = lp.T4_valorperdida / lp.capital_base #porcentaje del capital total que representa la perdida en cada toque
-        lp.T5_percperdida = lp.T5_valorperdida / lp.capital_base
-        lp.T6_percperdida = lp.T6_valorperdida / lp.capital_base
-        lp.T4_MaxUSDTQty = lp.T4_valorperdida / lp.perc_SubSL #Volumen de la posicion a abrir en ese toque
-        lp.T5_MaxUSDTQty = lp.T5_valorperdida / lp.perc_SubSL
-        lp.T6_MaxUSDTQty = lp.T6_valorperdida / lp.perc_SubSL
-
-
-
-        #LOGICA DE POSICIONES
-        if lp.current_price < lp.Po1_valor and not rt.control_pos1: #POS1
-            rt.control_pos1 = True
-
-            rt.PE_Pos1 = lp.Po1_valor * 1.0005 #Aca tiene que tomar el current price en ese momento, simulo un splittage
-            rt.SL_Pos1 = rt.PE_Pos1 + (rt.PE_Pos1*lp.perc_SubSL) #Establece el TP y el SL en base al precio tomado.
-            rt.TP_Pos1 = rt.PE_Pos1 - (rt.PE_Pos1*lp.perc_SubSL)
+                 
+                #### Estos calculos de toques son en base al escalon 1 que es el de menos perdida,
+                #### tendria que hacerlo en el escalon del medio para ser mas fidedigno.
+                lp.T4_valorperdida = lp.valor_SubSL1 * (2**4) #valor de la perdida en cada toque
+                lp.T5_valorperdida = lp.valor_SubSL1 * (2**5)
+                lp.T6_valorperdida = lp.valor_SubSL1 * (2**6)
+                lp.T4_percperdida = lp.T4_valorperdida / lp.capital_base #porcentaje del capital total que representa la perdida en cada toque
+                lp.T5_percperdida = lp.T5_valorperdida / lp.capital_base
+                lp.T6_percperdida = lp.T6_valorperdida / lp.capital_base
+                lp.T4_MaxUSDTQty = lp.T4_valorperdida / lp.perc_SubSL1 #Volumen de la posicion a abrir en ese toque
+                lp.T5_MaxUSDTQty = lp.T5_valorperdida / lp.perc_SubSL1
+                lp.T6_MaxUSDTQty = lp.T6_valorperdida / lp.perc_SubSL1
 
 
-            rt.Qty_USDT_SubPosicion = lp.PF_esperado1 / ((rt.PE_Pos1  - lp.limite_inferior) / rt.PE_Pos1 ) #el segundo termino de la division es el recorrido_perc1 pero calculado en el PE
+
+                #LOGICA DE POSICIONES
+                if lp.current_price <= lp.Po1_valor and not rt.control_pos1: #POS1
+                    rt.control_pos1 = True
+                    rt.PE_Pos1 = lp.current_price 
+                    splittage = (lp.Po1_valor - rt.PE_Pos1) 
+                    rt.SL_Pos1 = lp.precio_banda - splittage #Establece el TP y el SL en base al precio tomado, mueve el sl y el tp de igual manera que el PE
+                    rt.TP_Pos1 = lp.step1_valor - splittage
+
+                    rt.Qty_USDT_SubPosicion = lp.PF_esperado1 / ((rt.PE_Pos1  - lp.limite_inferior) / rt.PE_Pos1 ) #el segundo termino de la division es el recorrido_perc1 pero calculado en el PE
+                    rt.Qty_mVar1 = rt.Qty_USDT_SubPosicion / rt.PE_Pos1 #Cantidad de covertura a solicitar la apertura (x2 con la Qty de recupero)
+                    rt.Qty_mVar1_rec = rt.Qty_mVar1 + rt.Qty_mVar1_rec_acum #La cantidad a recuperar que refleja la pura mas lo que venia acumualdo, es un numero impar de unnidades basicas puras es decir 3, 5, 7.
+                    Qty_To_Open1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec #cantidad a pasar a la solicitud
+                    
+                    wcsv.id_posicion = wcsv.id_posicion + 1
+                    wcsv.type_Pos = "Po1"
+                    Data_csv = [
+                        [
+                        wcsv.id_posicion,
+                        wcsv.type_Pos,
+                        f"{rt.SL_Pos1:.2f}",
+                        f"{rt.PE_Pos1:.2f}",   
+                        f"{rt.TP_Pos1:.2f}",
+                        f"{rt.Qty_USDT_SubPosicion:.2f}",
+                        f"{rt.Qty_mVar1:.3f}",
+                        f"{rt.Qty_mVar1_rec:.3f}",
+                        f"{Qty_To_Open1:.3f}",
+                        f"{rt.cont_hits1}"
+                        ]
+                    ]
+                    write_csv(Data_csv)
+                    
+
+
+                # if lp.current_price < rt.TP_Pos1 and not rt.control_TP1 and rt.control_pos1: ######TP1
+                #     rt.control_TP1 = True
+                #     Qty_To_Close1 = rt.Qty_mVar1_rec #cerrar y tomar ganancias del recupero
+                #     rt.Qty_mVar1_rec = 0 #vuelvo a cero el valor a recuperar
+                #     rt.Qty_mVar1_rec_acum = 0
+                #     rt.PE_TP_Pos1 = lp.current_price  #Registra el precio de ejecucion del TP
+                #     rt.cont_hits1 = 1 #Vuevle a cero el contador de toques
+
+                #     wcsv.id_posicion = wcsv.id_posicion + 1
+                #     wcsv.type_Pos = "TP1"
+                #     Data_csv = [
+                #         [
+                #         wcsv.id_posicion,
+                #         wcsv.type_Pos,
+                #         f" ",
+                #         f"{rt.PE_TP_Pos1:.2f}",f" ",
+                #         f" ",
+                #         f"{Qty_To_Close1:.2f}",
+                #         f" ",
+                #         f" ",
+                #         f" "
+                #         ]
+                #     ]
+                #     write_csv(Data_csv)
+
+
+
+                if lp.current_price >= rt.SL_Pos1 and rt.control_pos1: ##########        SL1
+                    rt.control_pos1 = False
+                    rt.PE_SL_Pos1 = lp.current_price 
+                    Qty_To_Close1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec #Si paso por el TP la Qty_mVar1_rec va a ser cero y va a cerrar solo la parte pura, en el SL debe quedar todo cerrado.
+                    
+                    rt.PnL_SL1 = (Qty_To_Close1 * rt.PE_Pos1) - (Qty_To_Close1 * rt.PE_SL_Pos1)
+                    
+                    rt.balance_pos1 = rt.balance_pos1 + rt.PnL_SL1
+
+                    if not rt.control_TP1: #si no toco TP1
+                       rt.cont_hits1 = rt.cont_hits1 + 1 
+                       rt.Qty_mVar1_rec_acum = rt.Qty_mVar1_rec + rt.Qty_mVar1
+                    rt.control_TP1 = False
+
+                    wcsv.id_posicion = wcsv.id_posicion + 1
+                    wcsv.type_Pos = "SL1"
+                    Data_csv = [
+                        [
+                        wcsv.id_posicion,
+                        wcsv.type_Pos,
+                        f"-",
+                        f"{rt.PE_SL_Pos1:.2f}",
+                        f"-",      
+                        f"{rt.PnL_SL1:.2f}",
+                        f"{rt.Qty_mVar1:.3f}",
+                        f"{rt.Qty_mVar1_rec:.3f}",
+                        f"{Qty_To_Close1:.3f}",
+                        f"{rt.cont_hits1}" 
+                        ]
+                    ]
+                    write_csv(Data_csv)
+
+                    
+
+                    rt.SL_Pos1 = 0
+                    rt.PE_Pos1 = 0
+                    rt.TP_Pos1 = 0
+                    rt.Qty_USDT_SubPosicion = 0
+                    rt.ValorPuro_Pos1 = 0
+                    rt.Qty_mVar1 = 0
+
+
+                
+                if rt.control_pos1:
+                    rt.ValorPuro_Pos1 = rt.Qty_USDT_SubPosicion * ((rt.PE_Pos1  - lp.current_price ) / rt.PE_Pos1 ) 
+                
             
-            rt.ValorPuro_Pos1 = rt.Qty_USDT_SubPosicion * (1-(rt.PE_Pos1 / lp.current_price)) #Valor de la subposicion que corresponde a covertura
-            
-
-        if lp.current_price < rt.TP_Pos1 and not rt.control_TP1 and rt.control_pos1: #TP1
-            rt.control_TP1 = True
-
-        if lp.current_price > rt.SL_Pos1 and rt.control_pos1: #SL1
-            rt.control_pos1 = False
-            rt.control_TP1 = False
-            rt.SL_Pos1 = 0.00
-            rt.TP_Pos1 = 0.00
-            rt.PE_Pos1 = 0.00
-
-        
-        
-
-
-
+        time.sleep(1)    
 
 
 #Puesta en funcionamiento del sokcket de binance llamando a la funcion principal.
@@ -296,7 +386,7 @@ async def start_socket(precio_banda_post, niveles_post_form, sl_post_form, slopt
     lp.input_sloption  = int(sloption_post_form)
     lp.input_sl = float(sl_post_form)
     lp.capital_base = 10000 
-    lp.current_price = float(current_price_form)
+    #lp.current_price = float(current_price_form) #esto es para simular un precio en concreto. (lo puedo borrar)
 
     async with socket as s:
         while True:
@@ -308,9 +398,13 @@ if __name__ == '__main__':
     loop.run_until_complete(start_socket())
 
 
+def write_csv(Data_csv): #Funcion que escribe el csv
+    with open("static/registro_posiciones.csv", mode='a', newline='', encoding='utf-8') as archivo: 
+        escritor_csv = csv.writer(archivo)
+        escritor_csv.writerows(Data_csv)
 
 
-def crear_csv():
+def crear_csv(): #Funcion que crea el csv
     with open("static/registro_posiciones.csv", mode='w', newline='', encoding='utf-8') as archivo:
         pass  
     print("Archivo CSV creado o vaciado exitosamente.")
@@ -319,31 +413,3 @@ crear_csv()
 
 
 
-
-     # ######################### DATOS CSV ############################
-            # datos = [
-            #             [
-            #             contador_posiciones, 
-            #             precioentrada, 
-            #             preciosalida, 
-            #             f"{pnl_sl:.2f}",
-            #             f"{dif_porcentual * 100:.5f}",
-            #             f"{control_tp}",
-            #             f"{pnl_tp:.2f}",
-            #             f"{tp_short:.2f}",
-            #             f"{precio_tp:.2f}",
-            #             fecha_hora_op,
-            #             fecha_hora_cl
-                        
-                    
-            #             ]
-            #         ]
-            
-            
-            # with open("app/static/datos.csv", mode='a', newline='', encoding='utf-8') as archivo: 
-            #     escritor_csv = csv.writer(archivo)
-            #     escritor_csv.writerows(datos)
-            # ######################### FIN DATOS CSV ############################
-           
-         
-                
