@@ -362,9 +362,9 @@
 <div id="tableContainer"></div>
 
 <script>
-    const csvURL = '/static/registro_posiciones.csv';
+        const csvURL = '/static/registro_posiciones.csv';
 
-    function cargarCSV() {
+        function cargarCSV() {
         fetch(csvURL + '?_=' + new Date().getTime()) // Evita caché
             .then(response => response.text())
             .then(csvData => {
@@ -381,34 +381,85 @@
                         // Iterar sobre cada fila del CSV y generar una tabla por fila
                         data.forEach(row => {
                             const table = document.createElement("table");
-                            table.innerHTML = `
-                                <tbody>
-                                    <tr>
-                                        <td>ID</th>
-                                        <td>Type</th>
-                                        <td>SL</th>
-                                        <td>PE</th>
-                                        <td>TP</th>
-                                        <td>Qty$</th>
-                                        <td>QtyMVar</th>
-                                        <td>QtyRec</th>
-                                        <td>QtyTot</th>
-                                        <td>Hits</th>
-                                    </tr>
-                                    <tr>
-                                        <td>${row[0]}</td>
-                                        <td>${row[1]}</td>
-                                        <td>${row[2]}</td>
-                                        <td>${row[3]}</td>
-                                        <td>${row[4]}</td>
-                                        <td>${row[5]}</td>
-                                        <td>${row[6]}</td>
-                                        <td>${row[7]}</td>
-                                        <td>${row[8]}</td>
-                                        <td>${row[9]}</td>
-                                    </tr>
-                                </tbody>
-                            `;
+
+                            // Verificar el valor de row[1] y cambiar la tabla según sea Po1 o SL1
+                            if (row[1] === 'Po1') {
+                                table.innerHTML = `
+                                    <tbody>
+                                        <tr>
+                                            <td>ID</td>
+                                            <td>Type</td>
+                                            <td>SL</td>
+                                            <td>PE</td>
+                                            <td>TP</td>
+                                            <td>Qty$</td>
+                                            <td>QtyMVar</td>
+                                            <td>QtyRec</td>
+                                            <td>QtyTot</td>
+                                            <td>Hits</td>
+                                        </tr>
+                                        <tr>
+                                            <td>${row[0]}</td>
+                                            <td>${row[1]}</td>
+                                            <td>${row[2]}</td>
+                                            <td>${row[3]}</td>
+                                            <td>${row[4]}</td>
+                                            <td>${row[5]}</td>
+                                            <td>${row[6]}</td>
+                                            <td>${row[7]}</td>
+                                            <td>${row[8]}</td>
+                                            <td>${row[9]}</td>
+                                        </tr>
+                                    </tbody>
+                                `;
+                            } else if (row[1] === 'SL1') {
+                                table.innerHTML = `
+                                    <tbody style="background-color: lightblue;">
+                                        <tr>
+                                            <td>ID</td>
+                                            <td>Type</td>
+                                            <td>PE</td>
+                                            <td>PnL Acum</td>
+                                            <td>Pnl</td>
+                                            <td>QtyMVar</td>
+                                            <td>QtyRec</td>
+                                            <td>QtyTot</td>
+                                            <td>Hit N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>${row[0]}</td>
+                                            <td>${row[1]}</td>
+                                            <td>${row[2]}</td>
+                                            <td>${row[3]}</td>
+                                            <td>${row[4]}</td>
+                                            <td>${row[5]}</td>
+                                            <td>${row[6]}</td>
+                                            <td>${row[7]}</td>
+                                            <td>${row[8]}</td>
+                                        </tr>
+                                    </tbody>
+                                `;
+                            } else {
+                                // Tabla para otros tipos si es necesario
+                                table.innerHTML = `
+                                    <tbody>
+                                        <tr>
+                                            <td>ID</td>
+                                            <td>Type</td>
+                                            <td>PE</td>
+                                            <td>QtyTake</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>${row[0]}</td>
+                                            <td>${row[1]}</td>
+                                            <td>${row[2]}</td>
+                                            <td>${row[3]}</td>
+                                        </tr>
+                                    </tbody>
+                                `;
+                            }
+                            
                             // Agregar la tabla al contenedor
                             tableContainer.appendChild(table);
                         });

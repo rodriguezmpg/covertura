@@ -141,14 +141,13 @@ class RealTime: ##VARIABLES UTILIZADAS EN LAS POSICIONES
         self.Qty_USDT_SubPosicion = 0.00 
 
         self.PnL_SL1 = 0.00
+        self.PnL_SL1_array = []
 
         self.Qty_mVar1 = 0.000
         self.Qty_mVar1_rec = 0.000
         self.Qty_mVar1_rec_acum = 0.000
 
         self.ValorPuro_Pos1 = 0.00
-
-        self.balance_pos1 = 0.00 
 
         self.PE_TP_Pos1 = 0.00 #Precio al que se ejecuto el TP
         self.PE_SL_Pos1 = 0.00 #Precio al que se ejecuto el TP
@@ -166,7 +165,7 @@ wcsv = WCSV()
 #Para borrar la simulacion solamente tengo que dejar lo que esta dentro del FOR
 #    dentro de la funcion calculos() y recordar borrar el timesleep al ultimo
 
-prices = [990,1000,990,1000,990,1000,990,1000,990,1000]
+prices = [990,1000,990,1000,990,1000,990,1000,990,980,970,1000,990]
 
 control_simulacion = True
 
@@ -179,7 +178,7 @@ def calculos(msg):
             #lp.current_price = float(msg['c'])  # 'c' es el precio actual del ticker // Borrar donde puse en las variables post que es un POST
             if lp.current_price != lp.previous_price:
                 lp.previous_price = lp.current_price
-                print(f"Precio: {lp.current_price}  - Precio banda {lp.current_price}") 
+                print(f"Precio: {lp.current_price}") 
 
                 lp.contador = lp.contador + 1  #contador de envios del websocket
 
@@ -253,9 +252,9 @@ def calculos(msg):
                  
                 #### Estos calculos de toques son en base al escalon 1 que es el de menos perdida,
                 #### tendria que hacerlo en el escalon del medio para ser mas fidedigno.
-                lp.T4_valorperdida = lp.valor_SubSL1 * (2**4) #valor de la perdida en cada toque
-                lp.T5_valorperdida = lp.valor_SubSL1 * (2**5)
-                lp.T6_valorperdida = lp.valor_SubSL1 * (2**6)
+                lp.T4_valorperdida = sum((lp.valor_SubSL1*2) * (2 ** i) for i in range(4))#valor de la perdida en cada toque
+                lp.T5_valorperdida = sum((lp.valor_SubSL1*2) * (2 ** i) for i in range(5))
+                lp.T6_valorperdida = sum((lp.valor_SubSL1*2) * (2 ** i) for i in range(6))
                 lp.T4_percperdida = lp.T4_valorperdida / lp.capital_base #porcentaje del capital total que representa la perdida en cada toque
                 lp.T5_percperdida = lp.T5_valorperdida / lp.capital_base
                 lp.T6_percperdida = lp.T6_valorperdida / lp.capital_base
@@ -274,10 +273,12 @@ def calculos(msg):
                     rt.TP_Pos1 = lp.step1_valor - splittage
 
                     rt.Qty_USDT_SubPosicion = lp.PF_esperado1 / ((rt.PE_Pos1  - lp.limite_inferior) / rt.PE_Pos1 ) #el segundo termino de la division es el recorrido_perc1 pero calculado en el PE
-                    rt.Qty_mVar1 = rt.Qty_USDT_SubPosicion / rt.PE_Pos1 #Cantidad de covertura a solicitar la apertura (x2 con la Qty de recupero)
-                    rt.Qty_mVar1_rec = rt.Qty_mVar1 + rt.Qty_mVar1_rec_acum #La cantidad a recuperar que refleja la pura mas lo que venia acumualdo, es un numero impar de unnidades basicas puras es decir 3, 5, 7.
-                    Qty_To_Open1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec #cantidad a pasar a la solicitud
+                    rt.Qty_mVar1 = rt.Qty_USDT_SubPosicion / rt.PE_Pos1 
+                    rt.Qty_mVar1_rec_acum = (abs(sum(rt.PnL_SL1_array)) / (1 - (rt.TP_Pos1 / rt.PE_Pos1)))/rt.PE_Pos1 #Calcula la cobertura necesaria en base al balance negativo.
+                    rt.Qty_mVar1_rec =  rt.Qty_mVar1 + rt.Qty_mVar1_rec_acum                                  
                     
+                    Qty_To_Open1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec #cantidad a pasar a la solicitud
+                 
                     wcsv.id_posicion = wcsv.id_posicion + 1
                     wcsv.type_Pos = "Po1"
                     Data_csv = [
@@ -298,30 +299,30 @@ def calculos(msg):
                     
 
 
-                # if lp.current_price < rt.TP_Pos1 and not rt.control_TP1 and rt.control_pos1: ######TP1
-                #     rt.control_TP1 = True
-                #     Qty_To_Close1 = rt.Qty_mVar1_rec #cerrar y tomar ganancias del recupero
-                #     rt.Qty_mVar1_rec = 0 #vuelvo a cero el valor a recuperar
-                #     rt.Qty_mVar1_rec_acum = 0
-                #     rt.PE_TP_Pos1 = lp.current_price  #Registra el precio de ejecucion del TP
-                #     rt.cont_hits1 = 1 #Vuevle a cero el contador de toques
+                if lp.current_price <= rt.TP_Pos1 and not rt.control_TP1: ######TP1
+                    rt.control_TP1 = True
+                    wcsv.type_Pos = "TP1"
+                    rt.PE_TP_Pos1 = lp.current_price
+                    Qty_TakeTP = rt.Qty_mVar1_rec #cerrar y tomar ganancias del recupero
 
-                #     wcsv.id_posicion = wcsv.id_posicion + 1
-                #     wcsv.type_Pos = "TP1"
-                #     Data_csv = [
-                #         [
-                #         wcsv.id_posicion,
-                #         wcsv.type_Pos,
-                #         f" ",
-                #         f"{rt.PE_TP_Pos1:.2f}",f" ",
-                #         f" ",
-                #         f"{Qty_To_Close1:.2f}",
-                #         f" ",
-                #         f" ",
-                #         f" "
-                #         ]
-                #     ]
-                #     write_csv(Data_csv)
+                    #########################################
+                    #TENGO QUE CALCULAR LA GANANCIA EN BASE AL PE Y RESTARLA ya que el rec acum viene de el balance
+                    #########################################
+                    
+                    rt.cont_hits1 = 0 #Vuevle a cero el contador de toques
+
+                    wcsv.id_posicion = wcsv.id_posicion + 1
+                    
+                    Data_csv = [
+                        [
+                        wcsv.id_posicion,
+                        wcsv.type_Pos,
+                        f"{rt.PE_TP_Pos1:.2f}",
+                        f"{Qty_TakeTP:.2f}",
+                        f"{Qty_TakeTP:.2f}"
+                        ]
+                    ]
+                    write_csv(Data_csv)
 
 
 
@@ -330,14 +331,12 @@ def calculos(msg):
                     rt.PE_SL_Pos1 = lp.current_price 
                     Qty_To_Close1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec #Si paso por el TP la Qty_mVar1_rec va a ser cero y va a cerrar solo la parte pura, en el SL debe quedar todo cerrado.
                     
-                    rt.PnL_SL1 = (Qty_To_Close1 * rt.PE_Pos1) - (Qty_To_Close1 * rt.PE_SL_Pos1)
-                    
-                    rt.balance_pos1 = rt.balance_pos1 + rt.PnL_SL1
+                    rt.PnL_SL1 =  (Qty_To_Close1 * rt.PE_Pos1) - (Qty_To_Close1 * rt.PE_SL_Pos1) #Calcula la perdida de la posicion abierta que se esta cerrando
+                    rt.PnL_SL1_array.append(rt.PnL_SL1) #Agrega la perdida al array
+                    sum_PnlArray = sum(rt.PnL_SL1_array) #Sumatoria de perdidas acumuladas
 
                     if not rt.control_TP1: #si no toco TP1
-                       rt.cont_hits1 = rt.cont_hits1 + 1 
-                       rt.Qty_mVar1_rec_acum = rt.Qty_mVar1_rec + rt.Qty_mVar1
-                    rt.control_TP1 = False
+                       rt.cont_hits1 = rt.cont_hits1 + 1
 
                     wcsv.id_posicion = wcsv.id_posicion + 1
                     wcsv.type_Pos = "SL1"
@@ -345,10 +344,9 @@ def calculos(msg):
                         [
                         wcsv.id_posicion,
                         wcsv.type_Pos,
-                        f"-",
                         f"{rt.PE_SL_Pos1:.2f}",
-                        f"-",      
-                        f"{rt.PnL_SL1:.2f}",
+                        f"{sum_PnlArray:.2f}",
+                        f"{rt.PnL_SL1:.2f}",  
                         f"{rt.Qty_mVar1:.3f}",
                         f"{rt.Qty_mVar1_rec:.3f}",
                         f"{Qty_To_Close1:.3f}",
@@ -358,7 +356,7 @@ def calculos(msg):
                     write_csv(Data_csv)
 
                     
-
+                    rt.control_TP1 = False
                     rt.SL_Pos1 = 0
                     rt.PE_Pos1 = 0
                     rt.TP_Pos1 = 0
