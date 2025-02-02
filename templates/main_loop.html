@@ -258,7 +258,7 @@
                               <td>V SubSL(lp)</td>
                               <td><span class="valor_SubSL1"></span></td>
                               <td>Balance</td>
-                              <td><span class="balance_pos1"></span></td>
+                              <td>-</td>
                               <td></td>
                               <td></td>
                             </tr>
@@ -397,6 +397,7 @@
                                             <td>QtyRec</td>
                                             <td>QtyTot</td>
                                             <td>Hits</td>
+                                            <td>Bal Pos1</td>
                                         </tr>
                                         <tr>
                                             <td>${row[0]}</td>
@@ -409,6 +410,7 @@
                                             <td>${row[7]}</td>
                                             <td>${row[8]}</td>
                                             <td>${row[9]}</td>
+                                            <td>${row[10]}</td>
                                         </tr>
                                     </tbody>
                                 `;
@@ -425,6 +427,7 @@
                                             <td>QtyRec</td>
                                             <td>QtyTot</td>
                                             <td>Hit N</td>
+                                            <td>Bal Pos1</td>
                                         </tr>
                                         <tr>
                                             <td>${row[0]}</td>
@@ -436,18 +439,21 @@
                                             <td>${row[6]}</td>
                                             <td>${row[7]}</td>
                                             <td>${row[8]}</td>
+                                            <td>${row[9]}</td>
                                         </tr>
                                     </tbody>
                                 `;
                             } else {
                                 // Tabla para otros tipos si es necesario
                                 table.innerHTML = `
-                                    <tbody>
+                                    <tbody style="background-color: lightgreen;">
                                         <tr>
                                             <td>ID</td>
                                             <td>Type</td>
                                             <td>PE</td>
                                             <td>QtyTake</td>
+                                            <td>Pnl</td>
+                                            <td>Bal Pos1</td>
 
                                         </tr>
                                         <tr>
@@ -455,6 +461,8 @@
                                             <td>${row[1]}</td>
                                             <td>${row[2]}</td>
                                             <td>${row[3]}</td>
+                                            <td>${row[4]}</td>
+                                            <td>${row[5]}</td>
                                         </tr>
                                     </tbody>
                                 `;

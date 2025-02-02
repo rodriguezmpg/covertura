@@ -106,8 +106,6 @@ def datos():
         'ValorPuro_Pos1': round(trading_loop.rt.ValorPuro_Pos1,2),
 
         'Qty_mVar1_rec': round(trading_loop.rt.Qty_mVar1_rec,3),
-
-        'balance_pos1': round(trading_loop.rt.balance_pos1,2),
         
         'cont_hits1': round(trading_loop.rt.cont_hits1,2),
 

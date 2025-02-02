@@ -1,3 +1,4 @@
+
 from binance.client import Client
 from binance.enums import *
 from binance.streams import BinanceSocketManager
@@ -168,7 +169,7 @@ wcsv = WCSV()
 #Para borrar la simulacion solamente tengo que dejar lo que esta dentro del FOR
 #    dentro de la funcion calculos() y recordar borrar el timesleep al ultimo
 
-prices = [990,1000,990,1000,990,1000,990,1000,990,980,1000,989,979,999,989,978,1000,988,1000,988,1002,978,1000,990,980,920]
+prices = [990,1000,990,1000,990,1000,990,1000,990,1000,990]
 
 control_simulacion = True
 
@@ -278,17 +279,9 @@ def calculos(msg):
                     rt.Qty_USDT_SubPosicion = lp.PF_esperado1 / ((rt.PE_Pos1  - lp.limite_inferior) / rt.PE_Pos1 ) #el segundo termino de la division es el recorrido_perc1 pero calculado en el PE
                     rt.Qty_mVar1 = rt.Qty_USDT_SubPosicion / rt.PE_Pos1 
                     rt.Qty_mVar1_rec_acum = (abs(sum(rt.PnL_SL1_array)) / (1 - (rt.TP_Pos1 / rt.PE_Pos1)))/rt.PE_Pos1 #Calcula la cobertura necesaria en base al balance negativo.
-                                                     
-                    #Condiciones para eliminar pequenios saldos del balance general de posicion 1.
-                    if rt.Qty_mVar1_rec_acum == 0 and rt.Bal_Pos1 < 0: #rt.Qty_mVar1_rec_acum == 0 se refiere a que  rt.PnL_SL1_array, es decir viene de un SL luego de un TP, y que rt.Bal_Pos1 es negativo
-                        equidad_balance = (abs(rt.Bal_Pos1) / (1 - (rt.TP_Pos1 / rt.PE_Pos1)))/rt.PE_Pos1 
-                    elif rt.Qty_mVar1_rec_acum == 0 and rt.Bal_Pos1 > 0:#aca hace que reste a rec_acum ya que el saldo es positivo
-                        equidad_balance = -abs(rt.Bal_Pos1 / (1 - (rt.TP_Pos1 / rt.PE_Pos1))/rt.PE_Pos1)
-                    else:
-                        equidad_balance = 0
-
-                    rt.Qty_mVar1_rec =  rt.Qty_mVar1 + rt.Qty_mVar1_rec_acum + equidad_balance
-                    Qty_To_Open1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec  #Cantidad a pasar a la solicitud
+                    rt.Qty_mVar1_rec =  rt.Qty_mVar1 + rt.Qty_mVar1_rec_acum                                  
+                    
+                    Qty_To_Open1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec #Cantidad a pasar a la solicitud
                  
                     wcsv.id_posicion = wcsv.id_posicion + 1
                     wcsv.type_Pos = "Po1"
@@ -321,9 +314,10 @@ def calculos(msg):
                     
                     rt.cont_hits1 = 0 #Vuevle a cero el contador de toques
 
+                    wcsv.id_posicion = wcsv.id_posicion + 1
+                    
                     rt.Bal_Pos1 = rt.Bal_Pos1 + rt.Pnl_TP1
 
-                    wcsv.id_posicion = wcsv.id_posicion + 1
                     Data_csv = [
                         [
                         wcsv.id_posicion,
@@ -340,6 +334,7 @@ def calculos(msg):
                     rt.Qty_mVar1_rec = 0
                     rt.Qty_mVar1_rec_acum = 0
                     rt.PnL_SL1_array.clear()
+
 
 
                 if lp.current_price >= rt.SL_Pos1 and rt.control_pos1: ##########        SL1
@@ -373,6 +368,8 @@ def calculos(msg):
                         ]
                     ]
                     write_csv(Data_csv)
+
+                    
                     if rt.control_TP1: rt.PnL_SL1_array.pop() #Elimina el ultimo PnL agregado que es el de cerrar la posicion pura, para que no abra ese monto como recupero ya que toco el TP
                     
                     rt.control_TP1 = False
@@ -426,7 +423,6 @@ def crear_csv(): #Funcion que crea el csv
         pass  
     print("Archivo CSV creado o vaciado exitosamente.")
 crear_csv()  
-
 
 
 
