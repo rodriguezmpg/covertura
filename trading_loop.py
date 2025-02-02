@@ -147,13 +147,52 @@ class RealTime: ##VARIABLES UTILIZADAS EN LAS POSICIONES
         self.Pnl_TP1 = 0.00
 
         self.Qty_mVar1 = 0.000
+        self.Qty_mVar2 = 0.000
+        self.Qty_mVar3 = 0.000
+        self.Qty_mVar4 = 0.000
+        self.Qty_mVar5 = 0.000
+        self.Qty_mVar6 = 0.000
+        self.Qty_mVar7 = 0.000
+        
         self.Qty_mVar1_rec = 0.000
+        self.Qty_mVar2_rec = 0.000
+        self.Qty_mVar3_rec = 0.000
+        self.Qty_mVar4_rec = 0.000
+        self.Qty_mVar5_rec = 0.000
+        self.Qty_mVar6_rec = 0.000
+        self.Qty_mVar7_rec = 0.000
+
         self.Qty_mVar1_rec_acum = 0.000
+        self.Qty_mVar2_rec_acum = 0.000
+        self.Qty_mVar3_rec_acum = 0.000
+        self.Qty_mVar4_rec_acum = 0.000
+        self.Qty_mVar5_rec_acum = 0.000
+        self.Qty_mVar6_rec_acum = 0.000
+        self.Qty_mVar7_rec_acum = 0.000
 
         self.ValorPuro_Pos1 = 0.00
+        self.ValorPuro_Pos2 = 0.00
+        self.ValorPuro_Pos3 = 0.00
+        self.ValorPuro_Pos4 = 0.00
+        self.ValorPuro_Pos5 = 0.00
+        self.ValorPuro_Pos6 = 0.00
+        self.ValorPuro_Pos7 = 0.00
 
         self.PE_TP_Pos1 = 0.00 #Precio al que se ejecuto el TP
+        self.PE_TP_Pos2 = 0.00
+        self.PE_TP_Pos3 = 0.00
+        self.PE_TP_Pos4 = 0.00
+        self.PE_TP_Pos5 = 0.00
+        self.PE_TP_Pos6 = 0.00
+        self.PE_TP_Pos7 = 0.00
+
         self.PE_SL_Pos1 = 0.00 #Precio al que se ejecuto el TP
+        self.PE_SL_Pos2 = 0.00
+        self.PE_SL_Pos3 = 0.00
+        self.PE_SL_Pos4 = 0.00
+        self.PE_SL_Pos5 = 0.00
+        self.PE_SL_Pos6 = 0.00
+        self.PE_SL_Pos7 = 0.00
 
         self.cont_hits1 = 0  
  
@@ -267,8 +306,14 @@ def calculos(msg):
 
 
 
-                #LOGICA DE POSICIONES
-                if lp.current_price <= lp.Po1_valor and not rt.control_pos1: #POS1
+                #################################################  LOGICA DE POSICIONES #################################################################
+
+                #######################################################################################################################################
+                ####################################################### INICIO PO1 #######################################################################
+                #######################################################################################################################################
+                
+                ############################################################### POS1 ####################################################################
+                if lp.current_price <= lp.Po1_valor and not rt.control_pos1: 
                     rt.control_pos1 = True
                     rt.PE_Pos1 = lp.current_price 
                     splittage = (lp.Po1_valor - rt.PE_Pos1) 
@@ -310,9 +355,8 @@ def calculos(msg):
                     ]
                     write_csv(Data_csv)
                     
-
-
-                if lp.current_price <= rt.TP_Pos1 and not rt.control_TP1: ######TP1
+                ############################################################### TP1 ###################################################################
+                if lp.current_price <= rt.TP_Pos1 and not rt.control_TP1: 
                     rt.control_TP1 = True
                     wcsv.type_Pos = "TP1"
                     rt.PE_TP_Pos1 = lp.current_price
@@ -341,8 +385,8 @@ def calculos(msg):
                     rt.Qty_mVar1_rec_acum = 0
                     rt.PnL_SL1_array.clear()
 
-
-                if lp.current_price >= rt.SL_Pos1 and rt.control_pos1: ##########        SL1
+                ############################################################### SL1 ###################################################################
+                if lp.current_price >= rt.SL_Pos1 and rt.control_pos1: 
                     rt.control_pos1 = False
                     rt.PE_SL_Pos1 = lp.current_price 
                     Qty_To_Close1 = rt.Qty_mVar1 + rt.Qty_mVar1_rec #Si paso por el TP la Qty_mVar1_rec va a ser cero y va a cerrar solo la parte pura, en el SL debe quedar todo cerrado.
@@ -383,7 +427,11 @@ def calculos(msg):
                     rt.ValorPuro_Pos1 = 0
                     rt.Qty_mVar1 = 0
 
+                #######################################################################################################################################
+                ####################################################### FIN PO1 #######################################################################
+                #######################################################################################################################################
 
+                
                 
                 if rt.control_pos1:
                     rt.ValorPuro_Pos1 = rt.Qty_USDT_SubPosicion * ((rt.PE_Pos1  - lp.current_price ) / rt.PE_Pos1 ) 
