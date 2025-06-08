@@ -15,9 +15,9 @@ client = Client(APY_KEY,APY_SECRET, tld='com') #prueba de pus
 symbol = 'ETHUSDT'
 
 
+
 class FixedData: ##VARIABLES UTILIZADAS EN LA SIMULACION
     def __init__(self):
-        self.borraresta = 0.00
         self.precio_banda = 0.00
         self.current_price = 0.00
         self.previous_price = 0.00
