@@ -143,8 +143,7 @@ def start_trading():
 def start_simulation():
 
     #start_socket(precio_banda_post, niveles_post_form, sl_post_form, sloption_post_form)
-    start = simulador.start_socket(1000, 5, 5, 1) #1 es % 2 es valor del SL
-
+    start = simulador.start_socket(1000, 5, 5, 1) #1 es % 2 es valor del SL 
     return render_template('main_loop.html')
 
 

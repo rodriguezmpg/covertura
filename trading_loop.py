@@ -11,12 +11,13 @@ import asyncio
 APY_KEY = 'pYBw0fO0OisuqFXhwj2SNy2DYU8N1MFCH2zJ2CUeYGiHwCa7DazkOjCChJaMfyth'
 APY_SECRET = 'EdPJTJn5gnCSgq3HpuuNANPLRHwtTA7TZLIp5Mb8aLIFjqyYCjjDDuXVDcLbyC2i'
 
-client = Client(APY_KEY,APY_SECRET, tld='com')
+client = Client(APY_KEY,APY_SECRET, tld='com') #prueba de pus
 symbol = 'ETHUSDT'
 
 
 class FixedData: ##VARIABLES UTILIZADAS EN LA SIMULACION
     def __init__(self):
+        self.borraresta = 0.00
         self.precio_banda = 0.00
         self.current_price = 0.00
         self.previous_price = 0.00
