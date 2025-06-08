@@ -18,7 +18,7 @@ symbol = 'ETHUSDT'
 
 class FixedData: ##VARIABLES UTILIZADAS EN LA SIMULACION
     def __init__(self):
-        self.precio_banda = 0.00
+        self.precio_banda = 0.00 #ultimo intentode push
         self.current_price = 0.00
         self.previous_price = 0.00
         self.percentsl = 0.00 #es la distancia porcentual entre el PE y el limite inferior.
